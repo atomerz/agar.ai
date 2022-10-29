@@ -1,5 +1,5 @@
 #pragma once
-#include "RandomStrategy.h"
+#include "strategies/RandomStrategy.h"
 ////////////////////////////////////////////////////////////////////////////////
 namespace agarai
 {

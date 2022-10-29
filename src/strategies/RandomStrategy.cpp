@@ -1,6 +1,6 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
-#include "RandomStrategy.h"
+#include "strategies/RandomStrategy.h"
 #include "Bubble.h"
 using namespace agarai;
 ////////////////////////////////////////////////////////////////////////////////

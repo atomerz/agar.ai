@@ -1,8 +1,8 @@
 #pragma once
 #include "GL/glew.h"
 #include "GL/freeglut.h"
-#include "IRenderEngine.h"
-#include "IRenderableObject.h"
+#include "graphics/IRenderEngine.h"
+#include "graphics/IRenderableObject.h"
 #include <string>
 #include <vector>
 ////////////////////////////////////////////////////////////////////////////////

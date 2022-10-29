@@ -1,5 +1,5 @@
 #include "GameManager.h"
-#include "CowardHunterStrategy.h"
+#include "strategies/CowardHunterStrategy.h"
 #include <algorithm>
 using namespace std;
 using namespace agarai;

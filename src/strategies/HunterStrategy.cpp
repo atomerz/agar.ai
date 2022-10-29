@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <vector>
 #include <iterator>
-#include "HunterStrategy.h"
+#include "strategies/HunterStrategy.h"
 #include "Bubble.h"
 using namespace agarai;
 using namespace std;

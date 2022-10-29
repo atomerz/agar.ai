@@ -1,5 +1,5 @@
 #define _USE_MATH_DEFINES
-#include "CowardHunterStrategy.h"
+#include "strategies/CowardHunterStrategy.h"
 #include "Bubble.h"
 #include <cmath>
 #include <algorithm>

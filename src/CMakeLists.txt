@@ -5,8 +5,8 @@ find_package(Threads REQUIRED)
 
 include_directories( ${GLUT_INCLUDE_DIRS} ${GLEW_INCLUDE_DIRS} )
 
-file(GLOB_RECURSE CppSources ./*.cpp)
-file(GLOB_RECURSE CppHeaders ./*.h)
+include_directories(${PROJECT_SOURCE_DIR}/src)
+file(GLOB_RECURSE CppSources ${PROJECT_SOURCE_DIR}/src/*.cpp)
 
 add_executable(agar.ai ${CppSources})
 

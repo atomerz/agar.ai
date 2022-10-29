@@ -1,5 +1,5 @@
 #pragma once
-#include "HunterStrategy.h"
+#include "strategies/HunterStrategy.h"
 ////////////////////////////////////////////////////////////////////////////////
 namespace agarai
 {
