@@ -4,12 +4,12 @@
 #include <algorithm>
 #include <vector>
 #include <iterator>
-#include "strategies/HunterStrategy.h"
-#include "Bubble.h"
+#include "agar/strategies/HunterStrategy.h"
+#include "agar/RenderableBubble.h"
 using namespace agarai;
 using namespace std;
 ////////////////////////////////////////////////////////////////////////////////
-HunterStrategy::HunterStrategy(Bubble* target, bool huntBiggest)
+HunterStrategy::HunterStrategy(RenderableBubble* target, bool huntBiggest)
 {
 	this->target = target;
 	this->huntBiggest = huntBiggest;
@@ -25,16 +25,15 @@ HunterStrategy::~HunterStrategy()
 {
 }
 //------------------------------------------------------------------------------
-bool fn(Bubble* b1, Bubble* b2)
+bool fn(RenderableBubble* b1, RenderableBubble* b2)
 {
 	return true;
 }
 void HunterStrategy::decide(const DecisionContext& context)
 {
 	vector<Bubble*> preys;
-	copy_if(context.visibleNeighbours.begin(), context.visibleNeighbours.end(), back_inserter(preys),
-		[this](Bubble* b)
-		{
+	copy_if(context.visibleNeighbors.begin(), context.visibleNeighbors.end(), back_inserter(preys),
+		[this](auto b) {
 			return target->isBigger(b);
 		});
 
@@ -50,10 +49,8 @@ void HunterStrategy::decide(const DecisionContext& context)
 	//	<< (huntBiggest ? "b" : "s") << endl;
 	
 	sort(preys.begin(), preys.end(),
-		[this](Bubble* b1, Bubble* b2)
-		{
-			if(huntBiggest)
-			{
+		[this](auto b1, auto b2) {
+			if(huntBiggest) {
 				float b1Value = b1->getMass() - target->getPosition().distance(b1->getPosition());
 				float b2Value = b2->getMass() - target->getPosition().distance(b2->getPosition());
 				return b1Value > b2Value;

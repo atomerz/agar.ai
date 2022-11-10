@@ -1,5 +1,5 @@
 #pragma once
-#include "Bubble.h"
+#include "agar/RenderableBubble.h"
 #include "graphics/RenderEngine.h"
 #include "utils.h"
 #include <vector>
@@ -36,8 +36,8 @@ namespace agarai
 		const float minFoodMass;
 		const float maxFoodMass;
 
-		std::vector<Bubble*> bubbles;
-		std::vector<Bubble*> foods;
+		std::vector<RenderableBubble*> bubbles;
+		std::vector<RenderableBubble*> foods;
 
 	private:
 		Coord2d generateRandomCoords() const;

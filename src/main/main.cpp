@@ -1,15 +1,14 @@
-#include "GameManager.h"
-#include "Bubble.h"
+#include "agar/GameManager.h"
 #include <sstream>
-using namespace agarai;
-using namespace std;
-
 #include <iostream>
 #include <set>
 #include <vector>
 #include <iterator>
 #include <functional>
 #include <algorithm>
+
+using namespace agarai;
+using namespace std;
 ////////////////////////////////////////////////////////////////////////////////
 GameManager manager;
 ////////////////////////////////////////////////////////////////////////////////
@@ -69,7 +68,6 @@ void keyboardCallback(unsigned char key, int x, int y)
 {
 	manager.onKeyPress(key, x, y);
 }
-
 //------------------------------------------------------------------------------
 void resizeCallback(int w, int h)
 {

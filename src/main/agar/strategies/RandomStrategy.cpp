@@ -1,12 +1,12 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
-#include "strategies/RandomStrategy.h"
-#include "Bubble.h"
+#include "agar/strategies/RandomStrategy.h"
+#include "agar/RenderableBubble.h"
 using namespace agarai;
 ////////////////////////////////////////////////////////////////////////////////
 const int RandomStrategy::decisionFrequency = 50;
 ////////////////////////////////////////////////////////////////////////////////
-RandomStrategy::RandomStrategy(Bubble* target)
+RandomStrategy::RandomStrategy(RenderableBubble* target)
 {
 	this->target = target;
 	target->setFieldOfViewColor(Color(0.5f, 0.5f, 0));

@@ -1,13 +1,13 @@
 #define _USE_MATH_DEFINES
-#include "strategies/CowardHunterStrategy.h"
-#include "Bubble.h"
+#include "agar/strategies/CowardHunterStrategy.h"
+#include "agar/RenderableBubble.h"
 #include <cmath>
 #include <algorithm>
 #include <iterator>
 using namespace agarai;
 using namespace std;
 ////////////////////////////////////////////////////////////////////////////////
-CowardHunterStrategy::CowardHunterStrategy(Bubble* target, bool huntBiggest)
+CowardHunterStrategy::CowardHunterStrategy(RenderableBubble* target, bool huntBiggest)
 	: HunterStrategy(target, huntBiggest)
 {
 	if(huntBiggest)
@@ -23,9 +23,8 @@ CowardHunterStrategy::~CowardHunterStrategy()
 void CowardHunterStrategy::decide(const DecisionContext& context)
 {
 	vector<Bubble*> threats;
-	copy_if(context.visibleNeighbours.begin(), context.visibleNeighbours.end(), back_inserter(threats),
-		[this](Bubble* b)
-		{
+	copy_if(context.visibleNeighbors.begin(), context.visibleNeighbors.end(), back_inserter(threats),
+		[this](auto b) {
 			return b->isBigger(target);
 		});
 

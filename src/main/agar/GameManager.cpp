@@ -27,7 +27,7 @@ void GameManager::init(int* argc, char** argv, Dimension2D worldSize)
 	
 	for(int i=0; i<noFoods; ++i)
 	{
-		Bubble* food = new Bubble(
+		RenderableBubble* food = new RenderableBubble(
 			&renderEngine,
 			randf(minFoodMass, maxFoodMass),
 			generateRandomCoords());
@@ -38,32 +38,30 @@ void GameManager::init(int* argc, char** argv, Dimension2D worldSize)
 
 	for(int i=0; i<noBubbles; ++i)
 	{
-		Bubble* bubble = new Bubble(&renderEngine, initialBubbleMass, generateRandomCoords());
-		IBubbleControlStrategy* strategy = nullptr;
+		RenderableBubble* bubble = new RenderableBubble(&renderEngine, initialBubbleMass, generateRandomCoords());
+		std::unique_ptr<IBubbleControlStrategy> strategy;
 		switch(i % 5)
 		{
 		case 0:
-			strategy = new RandomStrategy(bubble);
+			strategy.reset(new RandomStrategy(bubble));
 			break;
 		case 1:
-			strategy = new HunterStrategy(bubble, false);
+			strategy.reset(new HunterStrategy(bubble, false));
 			break;
 		case 2:
-			strategy = new HunterStrategy(bubble, true);
+			strategy.reset(new HunterStrategy(bubble, true));
 			break;
 		case 3:
-			strategy = new CowardHunterStrategy(bubble, false);
+			strategy.reset(new CowardHunterStrategy(bubble, false));
 			break;
 		case 4:
-			strategy = new CowardHunterStrategy(bubble, true);
+			strategy.reset(new CowardHunterStrategy(bubble, true));
 			break;
-		//TODO: this is for test, remove it when done.
 		default:
-			strategy = new CowardHunterStrategy(bubble, false);
-			break;
+			assert(false);
 		}
 		
-		bubble->setStrategy(strategy);
+		bubble->setStrategy(std::move(strategy));
 
 		bubbles.push_back(bubble);
 		renderEngine.addRenderableObject(bubble);
@@ -89,21 +87,19 @@ void GameManager::run()
 				context.worldLimits.bottom = 0;
 				context.worldLimits.top = (float)worldSize.height;
 
-				for(auto neighbuor : bubbles)
-				{
-					if(bubble != neighbuor
-						&& bubble->isInFieldOfView(neighbuor))
-					{
-						context.visibleNeighbours.push_back(neighbuor);
+				for(auto neighbor : bubbles) {
+					if(bubble != neighbor
+						&& bubble->isInFieldOfView(neighbor)) {
+						context.visibleNeighbors.push_back(neighbor);
 					}
 				}
 
 				for(auto food : foods)
 					if(bubble->isInFieldOfView(food))
-						context.visibleNeighbours.push_back(food);
+						context.visibleNeighbors.push_back(food);
 				
-			sort(context.visibleNeighbours.begin(), context.visibleNeighbours.end(),
-				[](Bubble* b1, Bubble* b2)
+			sort(context.visibleNeighbors.begin(), context.visibleNeighbors.end(),
+				[](auto b1, auto b2)
 				{
 					return b1->getMass() > b2->getMass();
 				});
@@ -119,7 +115,7 @@ void GameManager::run()
 			// check for collisions
 			for(size_t i=0; i<bubbles.size(); ++i)
 			{
-				Bubble* bubble = bubbles[i];
+				RenderableBubble* bubble = bubbles[i];
 
 				//eat food
 				for(auto food : foods)
@@ -134,7 +130,7 @@ void GameManager::run()
 				//eat other bubbles
 				for(size_t j=i+1; j<bubbles.size(); ++j)
 				{
-					Bubble* prey = bubbles[j];
+					RenderableBubble* prey = bubbles[j];
 					if(bubble->encompass(prey))
 					{
 						bubble->eat(prey);
@@ -146,13 +142,13 @@ void GameManager::run()
 			// sort by bubble size
 			//TODO: render engine should also use the sorted list
 			sort(bubbles.begin(), bubbles.end(),
-				[](Bubble* b1, Bubble* b2)
+				[](RenderableBubble* b1, RenderableBubble* b2)
 				{
 					return b1->getMass() > b2->getMass();
 				});
 
 			cout << "Time Scale: " << timeScale 
-				<< ". Best Bubble: " << bubbles[0]->getMass() << endl;
+				<< ". Best RenderableBubble: " << bubbles[0]->getMass() << endl;
 
 			this_thread::sleep_for(chrono::milliseconds((int)(10/timeScale)));
 		};

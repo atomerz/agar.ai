@@ -1,5 +1,8 @@
 #pragma once
+
 #include <vector>
+#include <memory>
+
 #include "utils.h"
 ////////////////////////////////////////////////////////////////////////////////
 namespace agarai
@@ -8,8 +11,9 @@ namespace agarai
 	////////////////////////////////////////////////////////////////////////////////
 	struct DecisionContext
 	{
-		agarai::Rectangle	worldLimits;
-		std::vector<Bubble*> visibleNeighbours;
+		Bubble*					me;
+		agarai::Rectangle		worldLimits;
+		std::vector<Bubble*> 	visibleNeighbors;
 	};
 	////////////////////////////////////////////////////////////////////////////////
 	class IBubbleControlStrategy

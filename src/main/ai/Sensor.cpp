@@ -1,0 +1,5 @@
+#include "ai/Sensor.h"
+
+using namespace agarai;
+////////////////////////////////////////////////////////////////////////////////
+// Returned sensor values range SENSOR_MIN..SENSOR_MAX

@@ -9,75 +9,39 @@ using namespace agarai;
 ////////////////////////////////////////////////////////////////////////////////
 const float Bubble::decayRate = 0.00001f;
 ////////////////////////////////////////////////////////////////////////////////
-Bubble::Bubble(IRenderEngine* renderEngine, float mass, float x, float y)
-	: fovColor(0.3f, 0.3f, 0.3f)
-{
-	init(renderEngine);	
+Bubble::Bubble(float mass, float x, float y) {
 	reset(mass, x, y);
+	controlStrategy = nullptr;
 }
 //------------------------------------------------------------------------------
-Bubble::Bubble(IRenderEngine* renderEngine, float mass, Coord2d c)
-{
-	init(renderEngine);
+Bubble::Bubble(float mass, Coord2d c) {
 	reset(mass, c);
 }
 //------------------------------------------------------------------------------
-Bubble::~Bubble()
-{
-	if(controlStrategy != NULL)
-		delete controlStrategy;
-	
-	renderEngine->destroyVBO(lineVBO);
-	renderEngine->destroyVBO(circleVBO);
+Bubble::~Bubble() {
 }
 //------------------------------------------------------------------------------
-void Bubble::init(IRenderEngine* renderEngine)
-{
-	this->renderEngine = renderEngine;
-
-	lineVBO = renderEngine->createVBO();
-	Vertex lineVertices[2] = { Vertex(0, 0), Vertex(1, 0) };
-	lineVBO.setBufferData(lineVertices, 2, VertexBufferObject::Usage::VBO_USAGE_STAIC_DRAW);
-
-	circleVBO = renderEngine->createVBO();
-	Vertex circleVertices[100];
-	float arc = (float)(2 * M_PI / 100);
-	for(int i=0; i<100; ++i)
-		circleVertices[i].setXYZW(cosf(i * arc), sinf(i * arc), 0);
-	circleVBO.setBufferData(circleVertices, 100, VertexBufferObject::Usage::VBO_USAGE_STAIC_DRAW);
-
-	controlStrategy = NULL;
-	hash<Bubble*> hash_fn;
-	identifier = hash_fn(this);
-}
-//------------------------------------------------------------------------------
-void Bubble::reset(float mass, float x, float y)
-{
+void Bubble::reset(float mass, float x, float y) {
 	isDead = false;
 	moveDirection = -1;
 	
-	color = Color::randomize();
-
 	surface = mass;
 	position.X = x;
 	position.Y = y;
 }
 //------------------------------------------------------------------------------
-void Bubble::reset(float mass, Coord2d c)
-{
+void Bubble::reset(float mass, Coord2d c) {
 	reset(mass, c.X, c.Y);
 }
 //------------------------------------------------------------------------------
-bool Bubble::encompass(Coord2d c) const
-{
+bool Bubble::encompass(Coord2d c) const {
 	if(isDead)
 		return false;
 
 	return position.distance(c) < getRadius();
 }
 //------------------------------------------------------------------------------
-bool Bubble::encompass(Bubble* target) const
-{
+bool Bubble::encompass(Bubble* target) const {
 	if(isDead
 		|| target->isDead
 		|| !isBigger(target))
@@ -86,23 +50,20 @@ bool Bubble::encompass(Bubble* target) const
 	return position.distance(target->position) < getRadius() - 1;
 }
 //------------------------------------------------------------------------------
-bool Bubble::isInFieldOfView(Bubble* b) const
-{
+bool Bubble::isInFieldOfView(Bubble* b) const {
 	if(isDead || b->isDead)
 		return false;
 
 	return (position.distance(b->position) - b->getRadius()) < getFieldOfViewRadius();
 }
 //------------------------------------------------------------------------------
-bool Bubble::isBigger(Bubble* b) const
-{
+bool Bubble::isBigger(Bubble* b) const {
 	assert(!isDead && !b->isDead);
 
 	return getRadius() >= b->getRadius() + 1;
 }
 //------------------------------------------------------------------------------
-void Bubble::eat(Bubble* target)
-{
+void Bubble::eat(Bubble* target) {
 	assert(!isDead && !target->isDead
 		&& this->isBigger(target)
 		&& controlStrategy != nullptr);
@@ -111,91 +72,41 @@ void Bubble::eat(Bubble* target)
 	target->die();
 }
 //------------------------------------------------------------------------------
-void Bubble::die()
-{
+void Bubble::die() {
 	assert(!isDead);
 
 	isDead = true;
 }
 //------------------------------------------------------------------------------
-size_t Bubble::getIdentifier() const
-{
+size_t Bubble::getIdentifier() const {
 	return identifier;
 }
 //------------------------------------------------------------------------------
-Coord2d Bubble::getPosition() const
-{
+Coord2d Bubble::getPosition() const {
 	return position;
 }
 //------------------------------------------------------------------------------
-float Bubble::getRadius() const
-{
+float Bubble::getRadius() const {
 	if(isDead)
 		return 0;
 
 	return sqrtf(surface / (float)M_PI);
 }
 //------------------------------------------------------------------------------
-float Bubble::getFieldOfViewRadius() const
-{
+float Bubble::getFieldOfViewRadius() const {
 	float r = getRadius();
 	float coef = 1 - (r / (r + 10)); // a function that slowly goes from 1 to 0
 	return max(2.5f * r, 10.0f * r * coef);
 }
 //------------------------------------------------------------------------------
-float Bubble::getMass() const
-{
+float Bubble::getMass() const {
 	if(isDead)
 		return 0;
 
 	return (float)surface;
 }
 //------------------------------------------------------------------------------
-void Bubble::render() 
-{
-	if(isDead)
-		return;
-
-	Matrix4 mvMatrix;
-	float bubbleScale = getRadius();
-	mvMatrix.identity();
-	mvMatrix.scale(bubbleScale, bubbleScale, 1);
-	mvMatrix.translate(position.X, position.Y, 0);
-	renderEngine->setModelViewMatrix(mvMatrix);
-
-	renderEngine->setColor(color);
-
-	renderEngine->render(circleVBO, IRenderEngine::RenderMode::RENDER_MODE_POLYGON);
-
-	if(moveDirection >= 0)
-	{
-		mvMatrix.identity();
-		mvMatrix.scale(getFieldOfViewRadius(), getFieldOfViewRadius(), 1);
-		mvMatrix.rotate(moveDirection * 180 / (float)M_PI, 0, 0, 1);
-		mvMatrix.translate(position.X, position.Y, 0);
-		renderEngine->setModelViewMatrix(mvMatrix);
-
-		renderEngine->setColor(Color(1, 1, 1));
-
-		renderEngine->render(lineVBO, IRenderEngine::RenderMode::RENDER_MODE_LINES);
-	}
-
-	if(controlStrategy != nullptr)
-	{
-		float fovScale = getFieldOfViewRadius();
-		mvMatrix.identity();
-		mvMatrix.scale(fovScale, fovScale, 1);
-		mvMatrix.translate(position.X, position.Y, 0);
-		renderEngine->setModelViewMatrix(mvMatrix);
-
-		renderEngine->setColor(fovColor);
-
-		renderEngine->render(circleVBO, IRenderEngine::RenderMode::RENDER_MODE_LINE_LOOP);
-	}
-}
-//------------------------------------------------------------------------------
-void Bubble::update(float elapsedTime, agarai::Rectangle limits, DecisionContext context)
-{
+void Bubble::update(float elapsedTime, agarai::Rectangle limits, DecisionContext context) {
 	if(isDead || controlStrategy == NULL)
 		return;
 
@@ -205,8 +116,7 @@ void Bubble::update(float elapsedTime, agarai::Rectangle limits, DecisionContext
 	updateSurface(elapsedTime);
 }
 //------------------------------------------------------------------------------
-void Bubble::updatePosition(float elapsedTime, agarai::Rectangle limits)
-{
+void Bubble::updatePosition(float elapsedTime, agarai::Rectangle limits) {
 	if(isDead || moveDirection < 0)
 		return;
 
@@ -220,8 +130,7 @@ void Bubble::updatePosition(float elapsedTime, agarai::Rectangle limits)
 	position.Y = min(limits.top - margin, position.Y);	
 }
 //------------------------------------------------------------------------------
-void Bubble::updateSurface(float elapsedTime)
-{
+void Bubble::updateSurface(float elapsedTime) {
 	if(isDead || controlStrategy == NULL)
 		return;
 	
@@ -229,26 +138,18 @@ void Bubble::updateSurface(float elapsedTime)
 		surface -= decayRate * elapsedTime * powf(surface - 300, 2);
 }
 //------------------------------------------------------------------------------
-float Bubble::getCurrentSpeed() const
-{
+float Bubble::getCurrentSpeed() const {
 	if(isDead)
 		return 0;
 
 	return max(1.0f, 1000 / sqrt(surface));
 }
 //------------------------------------------------------------------------------
-void Bubble::setDirection(float dir)
-{
+void Bubble::setDirection(float dir) {
 	moveDirection = dir;
 }
 //------------------------------------------------------------------------------
-void Bubble::setStrategy(IBubbleControlStrategy* strategy)
-{
-	assert(strategy != nullptr);
-	this->controlStrategy = strategy;
-}
-//------------------------------------------------------------------------------
-void Bubble::setFieldOfViewColor(Color color)
-{
-	fovColor = color;
+void Bubble::setStrategy(std::unique_ptr<IBubbleControlStrategy>&& strategy) {
+	assert(strategy.get() != nullptr);
+	this->controlStrategy = std::move(strategy);
 }

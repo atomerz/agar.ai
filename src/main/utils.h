@@ -1,5 +1,6 @@
 #pragma once
 #include <random>
+#include <cassert>
 ////////////////////////////////////////////////////////////////////////////////
 namespace agarai
 {
@@ -71,12 +72,19 @@ namespace agarai
 		float bottom;
 		float top;
 
-		Rectangle(float left=0, float right=0, float bottom=0, float top=0)
-		{
+		Rectangle(float left=0, float right=0, float bottom=0, float top=0) {
 			this->left = left;
 			this->right  = right;
 			this->bottom  = bottom;
 			this->top  = top;
+		}
+
+		float width() const {
+		  return std::abs(left - right);
+		}
+
+		float height() const {
+		  return std::abs(bottom - top);
 		}
 	};
 	////////////////////////////////////////////////////////////////////////////////
@@ -93,5 +101,10 @@ namespace agarai
 	inline float randf()
 	{
 		return ((float)std::rand() / RAND_MAX);
+	}
+
+	inline unsigned randomUint(const unsigned min, const unsigned max) {
+		assert(max>min);
+		return min + (std::rand() % (max - min));
 	}
 }

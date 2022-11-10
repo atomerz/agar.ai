@@ -1,20 +1,21 @@
 #pragma once
-#include "IBubbleControlStrategy.h"
+#include "agar/IBubbleControlStrategy.h"
 #include <vector>
+////////////////////////////////////////////////////////////////////////////////
 namespace agarai
 {
-	class Bubble;
+	class RenderableBubble;
 	////////////////////////////////////////////////////////////////////////////////
 	class RandomStrategy : public IBubbleControlStrategy
 	{
 	public:
-		RandomStrategy(Bubble* target);
+		RandomStrategy(RenderableBubble* target);
 		~RandomStrategy();
 
 		void decide(const DecisionContext& context);
 
 	private:
-		Bubble* target;
+		RenderableBubble* target;
 		static const int decisionFrequency;
 
 	};
