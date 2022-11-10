@@ -1,9 +1,9 @@
 #include <gtest/gtest.h>
 
-#include <algorithm>
-
 #include "agar/Bubble.h"
-#include "agar/strategies/brain/SensorImpl.h"
+#include "agar/strategies/brain/sensor/SensorImpl.h"
+
+#include <algorithm>
 
 using namespace agarai;
 
@@ -59,4 +59,7 @@ TEST_F(ExampleSensor, AllSensorsWorkProperly) {
 
   EXPECT_FLOAT_EQ(sensor->get(SensorType::BIGGEST_NEIGHBOR_NE_MASS), 0.00065);
   EXPECT_FLOAT_EQ(sensor->get(SensorType::BIGGEST_NEIGHBOR_NE_DISTANCE), 0.13509256);
+
+  EXPECT_FLOAT_EQ(sensor->get(SensorType::BIGGEST_NEIGHBOR_NW_MASS), 0.0005);
+  EXPECT_FLOAT_EQ(sensor->get(SensorType::BIGGEST_NEIGHBOR_NW_DISTANCE), 0.047434162);
 }

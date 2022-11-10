@@ -1,8 +1,10 @@
 #pragma once
+
 #include "agar/IBubbleControlStrategy.h"
 #include "ai/NeuralNet.h"
-#include <vector>
 #include "ai/Sensor.h"
+
+#include <vector>
 ////////////////////////////////////////////////////////////////////////////////
 namespace agarai
 {

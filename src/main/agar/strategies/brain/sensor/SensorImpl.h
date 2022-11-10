@@ -21,6 +21,13 @@ class SensorImpl: public Sensor {
     std::vector<Bubble*> neNeighbors();
     Bubble* biggestNe();
 
+    bool nwComputed;
+    std::vector<Bubble*>  _nwNeighbors;
+    Bubble*               _biggestNw;
+
+    std::vector<Bubble*> nwNeighbors();
+    Bubble* biggestNw();
+
 };
 
 }
