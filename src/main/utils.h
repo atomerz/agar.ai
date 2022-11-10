@@ -57,6 +57,10 @@ namespace agarai
 			*this = *this + c;
 			return *this;
 		}
+
+		std::string toString() const {
+			return "(" + std::to_string(X) + ", " + std::to_string(Y) + ")";
+		}
 	};
 	////////////////////////////////////////////////////////////////////////////////
 	struct Dimension2D

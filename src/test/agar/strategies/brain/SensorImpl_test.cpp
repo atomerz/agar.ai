@@ -57,5 +57,6 @@ TEST_F(ExampleSensor, AllSensorsWorkProperly) {
   EXPECT_EQ(sensor->get(SensorType::LOCATION_Y), 0.52f);
   EXPECT_FLOAT_EQ(sensor->get(SensorType::MASS), 0.0005);
 
-  // EXPECT_EQ(sensor->get(SensorType::BIGGEST_NEIGHBOR_NE_MASS), 65);
+  EXPECT_FLOAT_EQ(sensor->get(SensorType::BIGGEST_NEIGHBOR_NE_MASS), 0.00065);
+  EXPECT_FLOAT_EQ(sensor->get(SensorType::BIGGEST_NEIGHBOR_NE_DISTANCE), 0.13509256);
 }

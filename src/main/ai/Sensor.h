@@ -39,6 +39,6 @@ namespace agarai
 
   class Sensor {
     public:
-      virtual float get(SensorType type) const = 0;
+      virtual float get(SensorType type) = 0;
   };
 }

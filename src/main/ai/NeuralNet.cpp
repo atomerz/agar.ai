@@ -4,7 +4,7 @@
 using namespace agarai;
 using namespace std;
 ////////////////////////////////////////////////////////////////////////////////
-array<float, Action::NUM_ACTIONS> NeuralNet::feedForward(const Sensor* const sensor)
+array<float, Action::NUM_ACTIONS> NeuralNet::feedForward(Sensor* sensor)
 {
     // This container is used to return values for all the action outputs. This array
     // contains one value per action neuron, which is the sum of all its weighted

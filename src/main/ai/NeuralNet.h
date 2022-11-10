@@ -19,6 +19,6 @@ namespace agarai
     std::vector<Neuron> neurons;
 
     public:
-    std::array<float, Action::NUM_ACTIONS>  feedForward(const Sensor* const sensor);
+    std::array<float, Action::NUM_ACTIONS>  feedForward(Sensor* sensor);
   };
 }
