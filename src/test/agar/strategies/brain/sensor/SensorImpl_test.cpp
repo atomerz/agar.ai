@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
 #include "agar/Bubble.h"
-#include "agar/strategies/brain/sensor/SensorImpl.h"
+#include "agar/strategies/brain/SensorImpl.h"
 
 #include <algorithm>
 
@@ -53,13 +53,40 @@ class ExampleSensor: public ::testing::Test {
 };
 
 TEST_F(ExampleSensor, AllSensorsWorkProperly) {
+  // self sensors
   EXPECT_EQ(sensor->get(SensorType::LOCATION_X), 0.51f);
   EXPECT_EQ(sensor->get(SensorType::LOCATION_Y), 0.52f);
   EXPECT_FLOAT_EQ(sensor->get(SensorType::MASS), 0.0005);
 
+  // biggest neighbors
   EXPECT_FLOAT_EQ(sensor->get(SensorType::BIGGEST_NEIGHBOR_NE_MASS), 0.00065);
   EXPECT_FLOAT_EQ(sensor->get(SensorType::BIGGEST_NEIGHBOR_NE_DISTANCE), 0.13509256);
 
   EXPECT_FLOAT_EQ(sensor->get(SensorType::BIGGEST_NEIGHBOR_NW_MASS), 0.0005);
   EXPECT_FLOAT_EQ(sensor->get(SensorType::BIGGEST_NEIGHBOR_NW_DISTANCE), 0.047434162);
+
+  EXPECT_FLOAT_EQ(sensor->get(SensorType::BIGGEST_NEIGHBOR_SW_MASS), 0.00045);
+  EXPECT_FLOAT_EQ(sensor->get(SensorType::BIGGEST_NEIGHBOR_SW_DISTANCE), 0.065192021);
+
+  EXPECT_FLOAT_EQ(sensor->get(SensorType::BIGGEST_NEIGHBOR_SE_MASS), 0.0005);
+  EXPECT_FLOAT_EQ(sensor->get(SensorType::BIGGEST_NEIGHBOR_SE_DISTANCE), 0.057008773);
+
+  // smallest neighbors
+  EXPECT_FLOAT_EQ(sensor->get(SensorType::SMALLEST_NEIGHBOR_NE_MASS), 0.00055);
+  EXPECT_FLOAT_EQ(sensor->get(SensorType::SMALLEST_NEIGHBOR_NE_DISTANCE), 0.035355341);
+
+  EXPECT_FLOAT_EQ(sensor->get(SensorType::SMALLEST_NEIGHBOR_NW_MASS), 0.0005);
+  EXPECT_FLOAT_EQ(sensor->get(SensorType::SMALLEST_NEIGHBOR_NW_DISTANCE), 0.047434162);
+
+  EXPECT_FLOAT_EQ(sensor->get(SensorType::SMALLEST_NEIGHBOR_SW_MASS), 0.00035);
+  EXPECT_FLOAT_EQ(sensor->get(SensorType::SMALLEST_NEIGHBOR_SW_DISTANCE), 0.16507575);
+
+  EXPECT_FLOAT_EQ(sensor->get(SensorType::SMALLEST_NEIGHBOR_SE_MASS), 0.0005);
+  EXPECT_FLOAT_EQ(sensor->get(SensorType::SMALLEST_NEIGHBOR_SE_DISTANCE), 0.057008773);
+
+  // food density
+  EXPECT_FLOAT_EQ(sensor->get(SensorType::FOOD_DENSITY_NE), 0);
+  EXPECT_FLOAT_EQ(sensor->get(SensorType::FOOD_DENSITY_NW), 0);
+  EXPECT_FLOAT_EQ(sensor->get(SensorType::FOOD_DENSITY_SW), 0);
+  EXPECT_FLOAT_EQ(sensor->get(SensorType::FOOD_DENSITY_SE), 0);
 }
