@@ -40,4 +40,10 @@ namespace agarai {
   // Returns by value a single genome with random genes.
   Genome makeRandomGenome();
 
+  // This generates a child genome from one or two parent genomes.
+  // If the parameter p.sexualReproduction is true, two parents contribute
+  // genes to the offspring. The new genome may undergo mutation.
+  // Must be called in single-thread mode between generations
+  Genome generateChildGenome(const std::vector<Genome>& parentGenomes);
+
 }

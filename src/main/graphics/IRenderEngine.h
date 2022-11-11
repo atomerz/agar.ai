@@ -58,8 +58,7 @@ namespace agarai
 		float xyzw[4];
 	};
 	////////////////////////////////////////////////////////////////////////////////
-	class VertexBufferObject
-	{
+	class VertexBufferObject {
 	public:
 		GLuint VaoId;
 		GLuint VboId;
@@ -70,9 +69,8 @@ namespace agarai
 			vertexCount = 0;
 		}
 
-		enum Usage
-		{
-			VBO_USAGE_STAIC_DRAW = GL_STATIC_DRAW,
+		enum Usage {
+			VBO_USAGE_STATIC_DRAW = GL_STATIC_DRAW,
 			VBO_USAGE_DYNAMIC_DRAW = GL_DYNAMIC_DRAW,
 		};
 		void setBufferData(const Vertex* vertices, size_t vertexCount, Usage usage)

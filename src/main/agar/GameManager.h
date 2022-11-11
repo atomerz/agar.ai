@@ -1,12 +1,14 @@
 #pragma once
-#include "agar/RenderableBubble.h"
-#include "graphics/RenderEngine.h"
-#include "utils.h"
+
 #include <vector>
 #include <thread>
-////////////////////////////////////////////////////////////////////////////////
-namespace agarai
-{
+
+#include "utils.h"
+#include "agar/RenderableBubble.h"
+#include "graphics/RenderEngine.h"
+
+namespace agarai {
+
 	class GameManager
 	{
 	public:
@@ -43,4 +45,5 @@ namespace agarai
 		Coord2d generateRandomCoords() const;
 
 	};
+
 }

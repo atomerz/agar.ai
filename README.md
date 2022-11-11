@@ -10,10 +10,12 @@ cmake --build build
 
 Run tests:
 ```
-cmake --build build --target agar.test && build/src/agar.test
+cmake --build build --target agar.test
+build/src/agar.test
 ```
 
 Run simulation:
 ```
-cmake --build build --target agar.ai && build/src/agar.ai
+cmake --build build --target agar.ai
+build/src/agar.ai
 ```

@@ -1,9 +1,10 @@
 #pragma once
 
-#include "ai/Sensor.h"
-#include "agar/IBubbleControlStrategy.h"
-
 #include <unordered_map>
+
+#include "DecisionContext.h"
+#include "ai/Sensor.h"
+
 
 namespace agarai {
 
@@ -13,6 +14,9 @@ class SensorImpl: public Sensor {
     ~SensorImpl();
 
     virtual float get(SensorType type);
+
+    static float normalizeMass(Bubble* bubble);
+    static float normalizeDistance(Bubble* b1, Bubble* b2, Rectangle limits);
 
     enum Direction {
       NE,
@@ -24,7 +28,8 @@ class SensorImpl: public Sensor {
     enum Feature {
       BIGGEST,
       SMALLEST,
-      AVERAGE,
+      CLOSEST_FOOD,
+      BIGGEST_FOOD,
     };
   
   private:
@@ -36,6 +41,8 @@ class SensorImpl: public Sensor {
     const std::vector<Bubble*>& neighbors(Direction direction);
     Bubble* const biggest(Direction direction);
     Bubble* const smallest(Direction direction);
+    Bubble* const closestFood(Direction direction);
+    Bubble* const biggestFood(Direction direction);
 
 };
 

@@ -1,53 +1,42 @@
 #pragma once
-#include "GL/glew.h"
-#include "GL/freeglut.h"
+
+#include <cstdint>
+#include <GL/glew.h>
+#include <GL/freeglut.h>
+
 #include "graphics/IRenderEngine.h"
 #include "graphics/IRenderableObject.h"
 #include "agar/Bubble.h"
-#include "agar/IBubbleControlStrategy.h"
 #include "utils.h"
 
-#include <cstdint>
-////////////////////////////////////////////////////////////////////////////////
-namespace agarai
-{
-	class RenderableBubble : public Bubble, public IRenderableObject {
-	public:
-		RenderableBubble(IRenderEngine* renderEngine, float mass, float x, float y);
-		RenderableBubble(IRenderEngine* renderEngine, float mass, Coord2d c);
-		~RenderableBubble();
 
-		void reset(float mass, float x, float y);
-		void reset(float mass, Coord2d c);
+namespace agarai {
 
-		void render();
-		void setFieldOfViewColor(Color color);
+class RenderableBubble : public Bubble, public IRenderableObject {
+  public:
+	RenderableBubble(IRenderEngine* renderEngine, float mass, float x, float y, Genome genome=Genome{});
+	RenderableBubble(IRenderEngine* renderEngine, float mass, Coord2d c, Genome genome=Genome{});
+	~RenderableBubble();
 
-	private:
-		const static float		decayRate;
+	void reset(float mass, float x, float y, Genome genome=Genome{}) override;
+	void reset(float mass, Coord2d c, Genome genome=Genome{}) override;
+	void setBrain(std::unique_ptr<Brain>&& brain);
 
-		IRenderEngine*			renderEngine;
-		//TODO: these can be static or placed somewhere to be created only once for all bubbles
-		VertexBufferObject		lineVBO;
-		VertexBufferObject		circleVBO;
+	void render();
+	void setFieldOfViewColor(Color color);
 
-		size_t					identifier;
-		float					surface;
-		Color					color;
-		Color					fovColor;
+  private:
+	IRenderEngine*			renderEngine;
+	//TODO: these can be static or placed somewhere to be created only once for all bubbles
+	VertexBufferObject		lineVBO;
+	VertexBufferObject		circleVBO;
 
-		Coord2d					position;
-		float					moveDirection;
+	Color					color;
+	Color					fovColor;
 
-		IBubbleControlStrategy* controlStrategy;
+private:
+	void					init(IRenderEngine* renderEngine);
 
-		bool					isDead;
+};
 
-	private:
-		void					init(IRenderEngine* renderEngine);
-
-		void					updatePosition(float elapsedTime, agarai::Rectangle limits);
-		void					updateSurface(float elapsedTime);
-
-	};
 }

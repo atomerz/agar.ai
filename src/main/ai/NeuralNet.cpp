@@ -9,8 +9,8 @@
 using namespace agarai;
 using namespace std;
 
-NeuralNet::NeuralNet(Genome _genome): genome(_genome) {
-  createWiringFromGenome();
+NeuralNet::NeuralNet(Genome _genome) {
+  createWiringFromGenome(_genome);
 }
 
 NeuralNet::~NeuralNet() {
@@ -196,7 +196,7 @@ static constexpr float initialNeuronOutput() { return 0.5; }
 //    range 0..p.genomeMaxLength-1, keeping a count of outputs for each neuron.
 // 2. Delete any referenced neuron index that has no outputs or only feeds itself.
 // 3. Renumber the remaining neurons sequentially starting at 0.
-void NeuralNet::createWiringFromGenome() {
+void NeuralNet::createWiringFromGenome(Genome genome) {
     NodeMap nodeMap;  // list of neurons and their number of inputs and outputs
     ConnectionList connectionList; // synaptic connections
 

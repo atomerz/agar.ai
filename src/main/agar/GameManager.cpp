@@ -1,22 +1,21 @@
 #include "GameManager.h"
-#include "strategies/CowardHunterStrategy.h"
-#include "strategies/brain/BrainStrategy.h"
+
 #include <algorithm>
+
+#include "brain/Brain.h"
+
 using namespace std;
 using namespace agarai;
 ////////////////////////////////////////////////////////////////////////////////
 GameManager::GameManager()
 	: timeScale(1), initialBubbleMass(100), minFoodMass(10), maxFoodMass(30),
-	noFoods(500), noBubbles(100)
-{
+	noFoods(1000), noBubbles(100) {
 }
-//------------------------------------------------------------------------------
-GameManager::~GameManager()
-{
+
+GameManager::~GameManager() {
 }
-//------------------------------------------------------------------------------
-void GameManager::init(int* argc, char** argv, Dimension2D worldSize)
-{
+
+void GameManager::init(int* argc, char** argv, Dimension2D worldSize) {
 	this->worldSize = worldSize;
 	this->renderEngine = renderEngine;
 
@@ -26,8 +25,7 @@ void GameManager::init(int* argc, char** argv, Dimension2D worldSize)
 	pMatrix.ortho2D(0, (float)worldSize.width, 0, (float)worldSize.height);
 	renderEngine.setProjectionMatrix(pMatrix);
 	
-	for(int i=0; i<noFoods; ++i)
-	{
+	for(int i=0; i<noFoods; ++i) {
 		RenderableBubble* food = new RenderableBubble(
 			&renderEngine,
 			randf(minFoodMass, maxFoodMass),
@@ -38,51 +36,49 @@ void GameManager::init(int* argc, char** argv, Dimension2D worldSize)
 	}
 
 	for(int i=0; i<noBubbles; ++i) {
-		RenderableBubble* bubble = new RenderableBubble(&renderEngine, initialBubbleMass, generateRandomCoords());
-		
-		std::unique_ptr<IBubbleControlStrategy> strategy;
-		strategy.reset(new BrainStrategy(bubble, makeRandomGenome()));
-		bubble->setStrategy(std::move(strategy));
-
+		RenderableBubble* bubble = new RenderableBubble(&renderEngine, initialBubbleMass,
+			generateRandomCoords(), makeRandomGenome());
 		bubbles.push_back(bubble);
 		renderEngine.addRenderableObject(bubble);
 	}
 }
-//------------------------------------------------------------------------------
+
 void GameManager::run() {
 	isRunning = true;
-	thread trd([this]()
-	{
+	thread trd([this]()	{
 		clock_t lastUpdateTime = clock();
-		while(isRunning)
-		{
+		while(isRunning) {
+			std::vector<Genome> parentGenomes;
+			std::transform(bubbles.begin(), bubbles.end(), back_inserter(parentGenomes), [](auto b){
+			  return b->getBrain()->getGenome();
+			});
+
 			float elapsedSeconds = (clock() - lastUpdateTime) / (float)CLOCKS_PER_SEC;
 			elapsedSeconds *= timeScale;
-			for(auto bubble : bubbles)
-			{
-				//create decision context
+			for(auto bubble : bubbles) {
 				DecisionContext context;
+				context.me = bubble;
 				context.worldLimits.left = 0;
 				context.worldLimits.right = (float)worldSize.width;
 				context.worldLimits.bottom = 0;
 				context.worldLimits.top = (float)worldSize.height;
 
 				for(auto neighbor : bubbles) {
-					if(bubble != neighbor
-						&& bubble->isInFieldOfView(neighbor)) {
+					if(bubble != neighbor && bubble->isInFieldOfView(neighbor)) {
 						context.visibleNeighbors.push_back(neighbor);
 					}
 				}
 
-				for(auto food : foods)
-					if(bubble->isInFieldOfView(food))
+				for(auto food : foods) {
+					if(bubble->isInFieldOfView(food)) {
 						context.visibleNeighbors.push_back(food);
+					}
+				}
 				
-			sort(context.visibleNeighbors.begin(), context.visibleNeighbors.end(),
-				[](auto b1, auto b2)
-				{
-					return b1->getMass() > b2->getMass();
-				});
+				sort(context.visibleNeighbors.begin(), context.visibleNeighbors.end(),
+					[](auto b1, auto b2) {
+						return b1->getMass() > b2->getMass();
+					});
 
 				bubble->update(
 					elapsedSeconds,
@@ -93,42 +89,35 @@ void GameManager::run() {
 			lastUpdateTime = clock();
 
 			// check for collisions
-			for(size_t i=0; i<bubbles.size(); ++i)
-			{
-				RenderableBubble* bubble = bubbles[i];
+			for(size_t i=0; i<bubbles.size(); ++i) {
+				auto bubble = bubbles[i];
 
-				//eat food
-				for(auto food : foods)
-				{
-					if(bubble->encompass(food))
-					{
+				// eat food
+				for(auto food : foods) {
+					if(bubble->encompass(food)) {
 						bubble->eat(food);
 						food->reset(randf(minFoodMass, maxFoodMass), generateRandomCoords());
 					}
 				}
 
-				//eat other bubbles
-				for(size_t j=i+1; j<bubbles.size(); ++j)
-				{
-					RenderableBubble* prey = bubbles[j];
-					if(bubble->encompass(prey))
-					{
+				// eat other bubbles
+				for(size_t j=i+1; j<bubbles.size(); ++j) {
+					auto prey = bubbles[j];
+					if(bubble->encompass(prey)) {
 						bubble->eat(prey);
-						prey->reset(initialBubbleMass, generateRandomCoords());
+						prey->reset(initialBubbleMass, generateRandomCoords(), generateChildGenome(parentGenomes));
 					}
 				}
 			}
 
 			// sort by bubble size
 			//TODO: render engine should also use the sorted list
-			sort(bubbles.begin(), bubbles.end(),
-				[](RenderableBubble* b1, RenderableBubble* b2)
-				{
-					return b1->getMass() > b2->getMass();
-				});
+			sort(bubbles.begin(), bubbles.end(), [](auto b1, auto b2) {
+			  return b1->getMass() > b2->getMass();
+			});
 
 			cout << "Time Scale: " << timeScale 
-				<< ". Best RenderableBubble: " << bubbles[0]->getMass() << endl;
+				<< ". Best Bubble: " << bubbles[0]->getMass() << endl;
 
 			this_thread::sleep_for(chrono::milliseconds((int)(10/timeScale)));
 		};
@@ -137,28 +126,23 @@ void GameManager::run() {
 
 	glutMainLoop();
 }
-//------------------------------------------------------------------------------
-void GameManager::onRender()
-{
+
+void GameManager::onRender() {
 	renderEngine.onRender();
 }
-//------------------------------------------------------------------------------
-void GameManager::onWindowSizeChanged(int w, int h)
-{
+
+void GameManager::onWindowSizeChanged(int w, int h) {
 	renderEngine.onWindowSizeChanged(w, h);
 }
-//------------------------------------------------------------------------------
-void GameManager::onTimer(int value)
-{
+
+void GameManager::onTimer(int value) {
 	renderEngine.onTimer(value);
 }
-//------------------------------------------------------------------------------
-void GameManager::onKeyPress(unsigned char key, int x, int y)
-{
+
+void GameManager::onKeyPress(unsigned char key, int x, int y) {
 }
-//------------------------------------------------------------------------------
-void GameManager::onSpacialKeyPress(int key, int x, int y)
-{
+
+void GameManager::onSpacialKeyPress(int key, int x, int y) {
 	switch(key)
 	{
 	case GLUT_KEY_UP:
@@ -169,9 +153,8 @@ void GameManager::onSpacialKeyPress(int key, int x, int y)
 		break;
 	}
 }
-//------------------------------------------------------------------------------
-void GameManager::onCleanup()
-{
+
+void GameManager::onCleanup() {
 	isRunning = false;
 	updaterThread->join();
 
@@ -181,19 +164,17 @@ void GameManager::onCleanup()
 
 	renderEngine.onCleanup();
 }
-//------------------------------------------------------------------------------
-Coord2d GameManager::generateRandomCoords() const
-{
+
+Coord2d GameManager::generateRandomCoords() const {
 	int margin = 10;
 	Coord2d c;
 
-	while(true)
-	{
+	while(true)	{
 		c.X = (float)(margin + (rand() % (worldSize.width - 2 * margin)));
 		c.Y = (float)(margin + (rand() % (worldSize.height - 2 * margin)));
-		for(auto bubble : bubbles)
-			if(bubble->encompass(c))
-				continue;
+		for(auto bubble : bubbles) {
+			if(bubble->encompass(c)) continue;
+		}
 		break;
 	}
 

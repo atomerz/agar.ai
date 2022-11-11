@@ -102,8 +102,7 @@ namespace agarai
 	/**
 	* Generates a random number in range [0.0f, 1.0f).
 	*/
-	inline float randf()
-	{
+	inline float randf() {
 		return ((float)std::rand() / RAND_MAX);
 	}
 
@@ -112,7 +111,7 @@ namespace agarai
 	}
 
 	inline unsigned randomUint(const unsigned min, const unsigned max) {
-		assert(max>min);
-		return min + (std::rand() % (max - min));
+		assert(max>=min);
+		return min + (std::rand() % (max - min + 1));
 	}
 }

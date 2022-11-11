@@ -18,9 +18,7 @@ class NeuralNet {
     std::array<float, Action::NUM_ACTIONS>  feedForward(Sensor* sensor);
 
   private:
-    void createWiringFromGenome();
-
-    Genome genome;
+    void createWiringFromGenome(Genome genome);
 
     std::vector<Gene> connections; // connections are equivalent to genes
 
