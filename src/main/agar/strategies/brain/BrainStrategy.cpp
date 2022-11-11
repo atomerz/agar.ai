@@ -1,21 +1,24 @@
 #include "agar/strategies/brain/BrainStrategy.h"
 #include "agar/RenderableBubble.h"
-#include <cmath>
-#include <algorithm>
+#include "agar/strategies/brain/SensorImpl.h"
+
 using namespace agarai;
-////////////////////////////////////////////////////////////////////////////////
-BrainStrategy::BrainStrategy(RenderableBubble* target)
-{
-	this->target = target;
-	target->setFieldOfViewColor(Color(0.5f, 0.5f, 0));
+
+// TODO: strategy should only need Bubble*
+BrainStrategy::BrainStrategy(RenderableBubble* target, Genome genome): neuralNet(genome) {
+  this->target = target;
+  target->setFieldOfViewColor(Color(0.5f, 0.5f, 0));
 }
-//------------------------------------------------------------------------------
-BrainStrategy::~BrainStrategy()
-{
+
+BrainStrategy::~BrainStrategy() {
 }
-//------------------------------------------------------------------------------
-void BrainStrategy::decide(const DecisionContext& context)
-{
-	float direction = randf() * 2 * (float)M_PI;
-	target->setDirection(direction);
+
+void BrainStrategy::decide(const DecisionContext& context) {
+  auto sensor = SensorImpl(context);
+  auto actions = neuralNet.feedForward(&sensor);
+
+  auto level = actions[Action::SET_DIRECTION];
+  level = (std::tanh(level) + 1.0) / 2.0; // convert to 0.0..1.0
+  auto direction = level * M_PI;
+  target->setDirection(direction);
 }

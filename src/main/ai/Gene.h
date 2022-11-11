@@ -22,9 +22,6 @@ namespace agarai
     static int16_t makeRandomWeight() { return randomUint(0, 0xffff) - 0x8000; }
   };
 
-  // An individual's genome is a set of Genes (see Gene comments above). Each
-  // gene is equivalent to one connection in a neural net. An individual's
-  // neural net is derived from its set of genes.
-  typedef std::vector<Gene> Genome;
+  Gene makeRandomGene();
 
 }

@@ -5,23 +5,21 @@
 #include "ai/Sensor.h"
 
 #include <vector>
-////////////////////////////////////////////////////////////////////////////////
-namespace agarai
-{
-	class RenderableBubble;
-	////////////////////////////////////////////////////////////////////////////////
-	class BrainStrategy : public IBubbleControlStrategy
-	{
-	public:
-		BrainStrategy(RenderableBubble* target);
-		~BrainStrategy();
 
-		void decide(const DecisionContext& context);
+namespace agarai {
 
-	private:
-		RenderableBubble* target;
-        Genome genome;
-        NeuralNet neuralNet;
+class RenderableBubble;
 
-	};
+class BrainStrategy: public IBubbleControlStrategy {
+  public:
+    BrainStrategy(RenderableBubble* target, Genome genome);
+    ~BrainStrategy();
+    void decide(const DecisionContext& context);
+
+  private:
+    RenderableBubble* target;
+    Genome genome;
+    NeuralNet neuralNet;
+};
+
 }

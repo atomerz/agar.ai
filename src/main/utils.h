@@ -107,6 +107,10 @@ namespace agarai
 		return ((float)std::rand() / RAND_MAX);
 	}
 
+	inline unsigned randomUint() {
+		return std::rand();
+	}
+
 	inline unsigned randomUint(const unsigned min, const unsigned max) {
 		assert(max>min);
 		return min + (std::rand() % (max - min));

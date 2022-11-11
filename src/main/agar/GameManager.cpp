@@ -1,5 +1,6 @@
 #include "GameManager.h"
 #include "strategies/CowardHunterStrategy.h"
+#include "strategies/brain/BrainStrategy.h"
 #include <algorithm>
 using namespace std;
 using namespace agarai;
@@ -36,31 +37,11 @@ void GameManager::init(int* argc, char** argv, Dimension2D worldSize)
 		renderEngine.addRenderableObject(food);
 	}
 
-	for(int i=0; i<noBubbles; ++i)
-	{
+	for(int i=0; i<noBubbles; ++i) {
 		RenderableBubble* bubble = new RenderableBubble(&renderEngine, initialBubbleMass, generateRandomCoords());
-		std::unique_ptr<IBubbleControlStrategy> strategy;
-		switch(i % 5)
-		{
-		case 0:
-			strategy.reset(new RandomStrategy(bubble));
-			break;
-		case 1:
-			strategy.reset(new HunterStrategy(bubble, false));
-			break;
-		case 2:
-			strategy.reset(new HunterStrategy(bubble, true));
-			break;
-		case 3:
-			strategy.reset(new CowardHunterStrategy(bubble, false));
-			break;
-		case 4:
-			strategy.reset(new CowardHunterStrategy(bubble, true));
-			break;
-		default:
-			assert(false);
-		}
 		
+		std::unique_ptr<IBubbleControlStrategy> strategy;
+		strategy.reset(new BrainStrategy(bubble, makeRandomGenome()));
 		bubble->setStrategy(std::move(strategy));
 
 		bubbles.push_back(bubble);
@@ -68,8 +49,7 @@ void GameManager::init(int* argc, char** argv, Dimension2D worldSize)
 	}
 }
 //------------------------------------------------------------------------------
-void GameManager::run()
-{
+void GameManager::run() {
 	isRunning = true;
 	thread trd([this]()
 	{
