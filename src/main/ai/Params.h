@@ -4,7 +4,7 @@
 
 namespace agarai {
 
-  constexpr uint16_t MAX_NUMBER_NEURONS = 5;
+  constexpr uint16_t MAX_NUMBER_NEURONS = 20;
 
   constexpr uint16_t GENOME_INITIAL_LENGTH_MIN = 24;
   constexpr uint16_t GENOME_INITIAL_LENGTH_MAX = 24;

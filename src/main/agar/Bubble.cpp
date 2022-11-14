@@ -12,18 +12,18 @@ using namespace agarai;
 
 const float Bubble::decayRate = 0.00001f;
 
-Bubble::Bubble(float mass, float x, float y, Genome genome) {
-	reset(mass, x, y, genome);
+Bubble::Bubble(float mass, float x, float y, std::unique_ptr<Genome> genome) {
+	reset(mass, x, y, std::move(genome));
 }
 
-Bubble::Bubble(float mass, Coord2d c, Genome genome) {
-	reset(mass, c, genome);
+Bubble::Bubble(float mass, Coord2d c, std::unique_ptr<Genome> genome) {
+	reset(mass, c, std::move(genome));
 }
 
 Bubble::~Bubble() {
 }
 
-void Bubble::reset(float mass, float x, float y, Genome genome) {
+void Bubble::reset(float mass, float x, float y, std::unique_ptr<Genome> genome) {
   _isDead = false;
   moveDirection = -1;
 
@@ -31,8 +31,10 @@ void Bubble::reset(float mass, float x, float y, Genome genome) {
   position.X = x;
   position.Y = y;
 
-  if (!genome.empty()) {
-    brain.reset(new Brain(this, genome));
+  age = 0;
+
+  if (genome) {
+    brain.reset(new Brain(this, *genome));
   } else {
     brain.reset();
   }
@@ -41,8 +43,8 @@ void Bubble::reset(float mass, float x, float y, Genome genome) {
   identifier = hash_fn(this);
 }
 
-void Bubble::reset(float mass, Coord2d c, Genome genome) {
-	reset(mass, c.X, c.Y, genome);
+void Bubble::reset(float mass, Coord2d c, std::unique_ptr<Genome> genome) {
+	reset(mass, c.X, c.Y, std::move(genome));
 }
 
 bool Bubble::encompass(Coord2d c) const {
@@ -99,6 +101,10 @@ Brain* Bubble::getBrain() const {
   return brain.get();
 }
 
+float Bubble::getAge() const {
+  return age;
+}
+
 Coord2d Bubble::getPosition() const {
 	return position;
 }
@@ -123,6 +129,8 @@ float Bubble::getMass() const {
 
 void Bubble::update(float elapsedTime, agarai::Rectangle limits, DecisionContext context) {
 	if(_isDead || brain == nullptr) return;
+
+	age += elapsedTime;
 
 	brain->decide(context);
 

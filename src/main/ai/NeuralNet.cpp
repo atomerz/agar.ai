@@ -98,7 +98,7 @@ void NeuralNet::printIGraphEdgeList() const {
 // Actions are renumbered 0..Action::NUM_ACTIONS - 1
 static void makeRenumberedConnectionList(ConnectionList &connectionList, const Genome &genome) {
   connectionList.clear();
-  for (auto const &gene : genome) {
+  for (auto const &gene : genome.getGenes()) {
     connectionList.push_back(gene);
     auto &conn = connectionList.back();
 

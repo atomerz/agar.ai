@@ -3,6 +3,7 @@
 #include <vector>
 #include <map>
 #include <list>
+#include <memory>
 
 #include "ai/Gene.h"
 
@@ -11,7 +12,36 @@ namespace agarai {
   // An individual's genome is a set of Genes (see Gene comments above). Each
   // gene is equivalent to one connection in a neural net. An individual's
   // neural net is derived from its set of genes.
-  typedef std::vector<Gene> Genome;
+  class Genome {
+  public:
+    Genome();
+    ~Genome();
+
+    // Returns by value a single genome with random genes.
+    static std::unique_ptr<Genome> random();
+
+    // This generates a child genome from one or two parent genomes.
+    // If the parameter p.sexualReproduction is true, two parents contribute
+    // genes to the offspring. The new genome may undergo mutation.
+    // Must be called in single-thread mode between generations
+    static std::unique_ptr<Genome> childGenome(const std::vector<Genome>& parentGenomes);
+
+    const std::vector<Gene>& getGenes() const;
+    const uint16_t getGeneration() const;
+
+    // Format: 32-bit hex strings, one per gene
+    void print() const;
+
+  private:
+    uint16_t generation;
+    std::vector<Gene> genes;
+
+    void cropLength(unsigned length);
+    void randomBitFlip();
+    void randomInsertDeletion();
+    void applyPointMutations();
+
+  };
 
   // This structure is used while converting the connection list to a
   // neural net. This helps us to find neurons that don't feed anything
@@ -35,18 +65,5 @@ namespace agarai {
   typedef std::map<uint16_t, Node> NodeMap; // key is neuron number 0..MAX_NUMBER_NEURONS - 1
 
   typedef std::list<Gene> ConnectionList;
-
-
-  // Returns by value a single genome with random genes.
-  Genome makeRandomGenome();
-
-  // This generates a child genome from one or two parent genomes.
-  // If the parameter p.sexualReproduction is true, two parents contribute
-  // genes to the offspring. The new genome may undergo mutation.
-  // Must be called in single-thread mode between generations
-  Genome generateChildGenome(const std::vector<Genome>& parentGenomes);
-
-  // Format: 32-bit hex strings, one per gene
-  void printGenome(Genome genome);
 
 }

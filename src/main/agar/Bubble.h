@@ -11,12 +11,12 @@ namespace agarai {
 
 class Bubble {
 public:
-	Bubble(float mass, float x, float y, Genome genome=Genome{});
-	Bubble(float mass, Coord2d c, Genome genome=Genome{});
+	Bubble(float mass, float x, float y, std::unique_ptr<Genome> genome=nullptr);
+	Bubble(float mass, Coord2d c, std::unique_ptr<Genome> genome=nullptr);
 	virtual ~Bubble();
 
-	virtual void reset(float mass, float x, float y, Genome genome=Genome{});
-	virtual void reset(float mass, Coord2d c, Genome genome=Genome{});
+	virtual void reset(float mass, float x, float y, std::unique_ptr<Genome> genome=nullptr);
+	virtual void reset(float mass, Coord2d c, std::unique_ptr<Genome> genome=nullptr);
 	void eat(Bubble *b);
 
 	/**
@@ -36,6 +36,7 @@ public:
 	float getMass() const;
 	float getCurrentSpeed() const;
   	Brain* getBrain() const;
+  	float getAge() const;
 
 	bool encompass(Coord2d c) const;
 	bool encompass(Bubble *b) const;
@@ -65,6 +66,8 @@ private:
 	std::unique_ptr<Brain> brain;
 	
 	bool _isDead;
+
+	float age;
 
 private:
 	void die();

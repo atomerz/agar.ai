@@ -8,8 +8,8 @@ using namespace std;
 using namespace agarai;
 ////////////////////////////////////////////////////////////////////////////////
 GameManager::GameManager()
-	: timeScale(1), initialBubbleMass(100), minFoodMass(10), maxFoodMass(30),
-	noFoods(1000), noBubbles(100) {
+	: timeScale(1), initialBubbleMass(50), minFoodMass(5), maxFoodMass(10),
+	noFoods(1000), noBubbles(200) {
 }
 
 GameManager::~GameManager() {
@@ -37,7 +37,7 @@ void GameManager::init(int* argc, char** argv, Dimension2D worldSize) {
 
 	for(int i=0; i<noBubbles; ++i) {
 		RenderableBubble* bubble = new RenderableBubble(&renderEngine, initialBubbleMass,
-			generateRandomCoords(), makeRandomGenome());
+			generateRandomCoords(), std::move(Genome::random()));
 		bubbles.push_back(bubble);
 		renderEngine.addRenderableObject(bubble);
 	}
@@ -106,7 +106,7 @@ void GameManager::run() {
 					auto prey = bubbles[j];
 					if(bubble->encompass(prey)) {
 						bubble->eat(prey);
-						prey->reset(initialBubbleMass, generateRandomCoords(), generateChildGenome(parentGenomes));
+						prey->reset(initialBubbleMass, generateRandomCoords(), std::move(Genome::childGenome(parentGenomes)));
 					}
 				}
 			}
@@ -120,13 +120,19 @@ void GameManager::run() {
 			// report summary
 			auto sinceLastReportSeconds = (clock() - lastReportTime) / (float)CLOCKS_PER_SEC;
 			if (sinceLastReportSeconds > 10) {
-				cout << "Time Scale: " << timeScale 
-					<< ". Best Bubble: " << bubbles[0]->getMass() << endl;
+				cout << "Time Scale: " << timeScale << endl;
 				
-				cout << "Top Bubble: ";
+				cout << "Top Bubble: " << endl;
+				cout << "  mass: " << bubbles[0]->getMass() << endl;
+				cout << "  age: " << bubbles[0]->getAge() << endl;
+				
 				auto topBubble = bubbles[0]->getBrain();
-				printGenome(topBubble->getGenome());
+				cout << "  generation: " << topBubble->getGenome().getGeneration() << endl;
+				cout << "  genome:" << endl;
+				topBubble->getGenome().print();
+				cout << "  brain:" << endl;
 				topBubble->getNeuralNet().printIGraphEdgeList();
+				cout << endl << endl << endl;
 
 				lastReportTime = clock();
 			}

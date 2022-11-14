@@ -14,12 +14,12 @@ namespace agarai {
 
 class RenderableBubble : public Bubble, public IRenderableObject {
   public:
-	RenderableBubble(IRenderEngine* renderEngine, float mass, float x, float y, Genome genome=Genome{});
-	RenderableBubble(IRenderEngine* renderEngine, float mass, Coord2d c, Genome genome=Genome{});
+	RenderableBubble(IRenderEngine* renderEngine, float mass, float x, float y, std::unique_ptr<Genome> genome=nullptr);
+	RenderableBubble(IRenderEngine* renderEngine, float mass, Coord2d c, std::unique_ptr<Genome> genome=nullptr);
 	~RenderableBubble();
 
-	void reset(float mass, float x, float y, Genome genome=Genome{}) override;
-	void reset(float mass, Coord2d c, Genome genome=Genome{}) override;
+	void reset(float mass, float x, float y, std::unique_ptr<Genome> genome=nullptr) override;
+	void reset(float mass, Coord2d c, std::unique_ptr<Genome> genome=nullptr) override;
 	void setBrain(std::unique_ptr<Brain>&& brain);
 
 	void render();
@@ -36,6 +36,8 @@ class RenderableBubble : public Bubble, public IRenderableObject {
 
 private:
 	void					init(IRenderEngine* renderEngine);
+
+    Color 					makeGeneticColor();
 
 };
 
