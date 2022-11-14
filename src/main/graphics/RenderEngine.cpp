@@ -84,10 +84,8 @@ void RenderEngine::onWindowSizeChanged(int w, int h)
 	glViewport(0, 0, w, h);
 }
 //------------------------------------------------------------------------------
-void RenderEngine::onTimer(int value)
-{
-	if (value != 0)
-	{
+void RenderEngine::onTimer(int value) {
+	if (value != 0)	{
 		stringstream sstr;
 		sstr << windowTitlePrefix
 			<< " - fps: " << frameCount * 4

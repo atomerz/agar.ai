@@ -10,7 +10,7 @@ for v in g.vs:
 	v['label'] = v['name']
 	if v['name'] in ['BneM', 'BneD', 'BnwM', 'BnwD', 'BswM', 'BswD', 'BseM', 'BseD', 'SneM', 'SneD', 'SnwM', 'SnwD', 'SswM', 'SswD', 'SseM', 'SseD', 'CFneM', 'CFneD', 'CFnwM', 'CFnwD', 'CFswM', 'CFswD', 'CFseM', 'CFseD', 'BFneM', 'BFneD', 'BnwM', 'BFnwD', 'BFswM', 'BFswD', 'BFseM', 'BFseD', 'CTneM', 'CTneD', 'CTnwM', 'CTnwD', 'CTswM', 'CTswD', 'CTseM', 'CTseD']:
 		v['color'] = 'lightblue'
-	elif v['name'] in ['D' ]:
+	elif v['name'] in ['D', 'Dn', 'Dw', 'Ds', 'De']:
 		v['color'] = 'lightpink'
 	else:
 		v['color'] = 'lightgrey'

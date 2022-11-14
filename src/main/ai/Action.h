@@ -5,6 +5,10 @@
 namespace agarai {
   
 enum Action {
+  SET_DIRECTION_NORTH,
+  SET_DIRECTION_WEST,
+  SET_DIRECTION_SOUTH,
+  SET_DIRECTION_EAST,
   SET_DIRECTION,
   NUM_ACTIONS,
 };

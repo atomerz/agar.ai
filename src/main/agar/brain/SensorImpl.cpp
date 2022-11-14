@@ -415,7 +415,9 @@ Bubble* const SensorImpl::closestThreat(Direction direction) {
     return me->getMass() <= b->getMass();
   });
   auto closestFood = std::min_element(foodInDirection.begin(), foodInDirection.end(), [me = context.me](auto b1, auto b2){
-    return b1->getPosition().distance(me->getPosition()) < b2->getPosition().distance(me->getPosition());
+    // for threats we have to calculate distance from their edge
+    return  (b1->getPosition().distance(me->getPosition()) - b1->getRadius()) <
+            (b2->getPosition().distance(me->getPosition()) - b2->getRadius());
   });
 
   if (closestFood != foodInDirection.end()) {
