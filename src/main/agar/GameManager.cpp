@@ -89,7 +89,7 @@ void GameManager::run() {
 
 			lastUpdateTime = clock();
 
-			// check for collisions
+			// check for collisions and old age
 			for(size_t i=0; i<bubbles.size(); ++i) {
 				auto bubble = bubbles[i];
 
@@ -106,8 +106,15 @@ void GameManager::run() {
 					auto prey = bubbles[j];
 					if(bubble->encompass(prey)) {
 						bubble->eat(prey);
-						prey->reset(initialBubbleMass, generateRandomCoords(), std::move(Genome::childGenome(parentGenomes)));
+						prey->reset(initialBubbleMass, generateRandomCoords(),
+							std::move(Genome::childGenome(parentGenomes)));
 					}
+				}
+
+				// die of old age
+				if (bubbles[i]->getAge() > 180) {
+					bubbles[i]->reset(initialBubbleMass, generateRandomCoords(),
+						std::move(Genome::childGenome(parentGenomes)));
 				}
 			}
 
