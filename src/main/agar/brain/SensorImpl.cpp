@@ -146,6 +146,46 @@ float SensorImpl::get(SensorType type) {
     sensorVal = normalizeDistance(context.me, bubble, context.worldLimits);
     break;
   }
+  case SensorType::BIGGEST_FOOD_NE_MASS: {
+    auto bubble = biggestFood(Direction::NE);
+    sensorVal = normalizeMass(bubble);
+    break;
+  }
+  case SensorType::BIGGEST_FOOD_NE_DISTANCE: {
+    auto bubble = biggestFood(Direction::NE);
+    sensorVal = normalizeDistance(context.me, bubble, context.worldLimits);
+    break;
+  }
+  case SensorType::BIGGEST_FOOD_NW_MASS: {
+    auto bubble = biggestFood(Direction::NW);
+    sensorVal = normalizeMass(bubble);
+    break;
+  }
+  case SensorType::BIGGEST_FOOD_NW_DISTANCE: {
+    auto bubble = closestFood(Direction::NW);
+    sensorVal = normalizeDistance(context.me, bubble, context.worldLimits);
+    break;
+  }
+  case SensorType::BIGGEST_FOOD_SW_MASS: {
+    auto bubble = biggestFood(Direction::SW);
+    sensorVal = normalizeMass(bubble);
+    break;
+  }
+  case SensorType::BIGGEST_FOOD_SW_DISTANCE: {
+    auto bubble = biggestFood(Direction::SW);
+    sensorVal = normalizeDistance(context.me, bubble, context.worldLimits);
+    break;
+  }
+  case SensorType::BIGGEST_FOOD_SE_MASS: {
+    auto bubble = biggestFood(Direction::SE);
+    sensorVal = normalizeMass(bubble);
+    break;
+  }
+  case SensorType::BIGGEST_FOOD_SE_DISTANCE: {
+    auto bubble = biggestFood(Direction::SE);
+    sensorVal = normalizeDistance(context.me, bubble, context.worldLimits);
+    break;
+  }
   default:
     assert(false);
     break;
@@ -156,14 +196,14 @@ float SensorImpl::get(SensorType type) {
   return sensorVal;
 }
 
-float SensorImpl::normalizeMass(Bubble* bubble) {
+float SensorImpl::normalizeMass(Bubble* const bubble) {
   if (bubble == nullptr) return 0;
 
   constexpr float MAX_MASS = 100000;
   return bubble->getMass() / MAX_MASS;
 }
 
-float SensorImpl::normalizeDistance(Bubble* b1, Bubble* b2, Rectangle limits) {
+float SensorImpl::normalizeDistance(Bubble* const b1, Bubble* const b2, Rectangle limits) {
   if (b2 == nullptr) return 1;
 
   const Coord2d blc(limits.left, limits.bottom);

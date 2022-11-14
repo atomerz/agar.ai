@@ -133,7 +133,22 @@ TEST_F(ExampleSensor, AllSensorsWorkProperly) {
   EXPECT_FLOAT_EQ(sensor->get(SensorType::BIGGEST_FOOD_NE_MASS), 0);
   EXPECT_FLOAT_EQ(sensor->get(SensorType::BIGGEST_FOOD_NE_DISTANCE), 1);
 
-  // EXPECT_FLOAT_EQ(sensor->get(SensorType::BIGGEST_FOOD_NW), 1.0);
-  // EXPECT_FLOAT_EQ(sensor->get(SensorType::BIGGEST_FOOD_SW), 0.065192021);
-  // EXPECT_FLOAT_EQ(sensor->get(SensorType::BIGGEST_FOOD_SE), 1.0);
+  EXPECT_FLOAT_EQ(
+    sensor->get(SensorType::BIGGEST_FOOD_NW_MASS),
+    SensorImpl::normalizeMass(b2));
+  EXPECT_FLOAT_EQ(
+    sensor->get(SensorType::BIGGEST_FOOD_NW_DISTANCE),
+    SensorImpl::normalizeDistance(me.get(), b2, limits));
+
+  EXPECT_FLOAT_EQ(
+    sensor->get(SensorType::BIGGEST_FOOD_SW_MASS),
+    SensorImpl::normalizeMass(b4));
+  EXPECT_FLOAT_EQ(
+    sensor->get(SensorType::BIGGEST_FOOD_SW_DISTANCE),
+    SensorImpl::normalizeDistance(me.get(), b4, limits));
+
+  EXPECT_FLOAT_EQ(sensor->get(SensorType::BIGGEST_FOOD_SE_MASS),
+    SensorImpl::normalizeMass(b6));
+  EXPECT_FLOAT_EQ(sensor->get(SensorType::BIGGEST_FOOD_SE_DISTANCE),
+    SensorImpl::normalizeDistance(me.get(), b6, limits));
 }

@@ -15,8 +15,8 @@ class SensorImpl: public Sensor {
 
     virtual float get(SensorType type);
 
-    static float normalizeMass(Bubble* bubble);
-    static float normalizeDistance(Bubble* b1, Bubble* b2, Rectangle limits);
+    static float normalizeMass(Bubble* const bubble);
+    static float normalizeDistance(Bubble* const b1, Bubble* const b2, Rectangle limits);
 
     enum Direction {
       NE,
