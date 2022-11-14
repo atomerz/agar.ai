@@ -18,6 +18,7 @@ class Brain {
     void decide(const DecisionContext& context);
 
     Genome getGenome() const;
+    NeuralNet getNeuralNet() const;
 
   private:
     Bubble* target;

@@ -57,6 +57,7 @@ TEST_F(ExampleSensor, AllSensorsWorkProperly) {
   EXPECT_EQ(sensor->get(SensorType::LOCATION_Y), 0.52f);
   EXPECT_FLOAT_EQ(sensor->get(SensorType::MASS), SensorImpl::normalizeMass(me.get()));
 
+  auto b0 = neighbors[0];
   auto b1 = neighbors[1];
   auto b2 = neighbors[2];
   auto b4 = neighbors[4];
@@ -151,4 +152,20 @@ TEST_F(ExampleSensor, AllSensorsWorkProperly) {
     SensorImpl::normalizeMass(b6));
   EXPECT_FLOAT_EQ(sensor->get(SensorType::BIGGEST_FOOD_SE_DISTANCE),
     SensorImpl::normalizeDistance(me.get(), b6, limits));
+
+  // closest threat
+  EXPECT_FLOAT_EQ(
+    sensor->get(SensorType::CLOSEST_THREAT_NE_MASS),
+    SensorImpl::normalizeMass(b0));
+  EXPECT_FLOAT_EQ(sensor->get(SensorType::CLOSEST_THREAT_NE_DISTANCE),
+    SensorImpl::normalizeDistance(me.get(), b0, limits));
+
+  EXPECT_FLOAT_EQ(sensor->get(SensorType::CLOSEST_THREAT_NW_MASS), 0);
+  EXPECT_FLOAT_EQ(sensor->get(SensorType::CLOSEST_THREAT_NW_DISTANCE), 1);
+
+  EXPECT_FLOAT_EQ(sensor->get(SensorType::CLOSEST_THREAT_SW_MASS), 0);
+  EXPECT_FLOAT_EQ(sensor->get(SensorType::CLOSEST_THREAT_SW_DISTANCE),1);
+
+  EXPECT_FLOAT_EQ(sensor->get(SensorType::CLOSEST_THREAT_SE_MASS), 0);
+  EXPECT_FLOAT_EQ(sensor->get(SensorType::CLOSEST_THREAT_SE_DISTANCE), 1);
 }

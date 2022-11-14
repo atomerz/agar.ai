@@ -5,6 +5,7 @@
 
 #include <cassert>
 #include <cmath>
+#include <iostream>
 
 using namespace agarai;
 using namespace std;
@@ -68,6 +69,26 @@ array<float, Action::NUM_ACTIONS> NeuralNet::feedForward(Sensor* sensor) {
     }
 
     return actionLevels;
+}
+
+void NeuralNet::printIGraphEdgeList() const {
+    for (auto & conn : connections) {
+        if (conn.sourceType == SENSOR) {
+            std::cout << sensorShortName((SensorType)(conn.sourceNum));
+        } else {
+            std::cout << "N" << std::to_string(conn.sourceNum);
+        }
+
+        std::cout << " ";
+
+        if (conn.sinkType == ACTION) {
+            std::cout << actionShortName((Action)(conn.sinkNum));
+        } else {
+            std::cout << "N" << std::to_string(conn.sinkNum);
+        }
+
+        std::cout << " " << std::to_string(conn.weight) << std::endl;
+    }
 }
 
 // Convert the indiv's genome to a renumbered connection list.

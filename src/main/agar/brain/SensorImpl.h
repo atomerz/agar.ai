@@ -30,6 +30,7 @@ class SensorImpl: public Sensor {
       SMALLEST,
       CLOSEST_FOOD,
       BIGGEST_FOOD,
+      CLOSEST_THREAT,
     };
   
   private:
@@ -43,6 +44,7 @@ class SensorImpl: public Sensor {
     Bubble* const smallest(Direction direction);
     Bubble* const closestFood(Direction direction);
     Bubble* const biggestFood(Direction direction);
+    Bubble* const closestThreat(Direction direction);
 
 };
 

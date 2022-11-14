@@ -47,6 +47,7 @@ void GameManager::run() {
 	isRunning = true;
 	thread trd([this]()	{
 		clock_t lastUpdateTime = clock();
+		clock_t lastReportTime = clock();
 		while(isRunning) {
 			std::vector<Genome> parentGenomes;
 			std::transform(bubbles.begin(), bubbles.end(), back_inserter(parentGenomes), [](auto b){
@@ -116,8 +117,19 @@ void GameManager::run() {
 			  return b1->getMass() > b2->getMass();
 			});
 
-			cout << "Time Scale: " << timeScale 
-				<< ". Best Bubble: " << bubbles[0]->getMass() << endl;
+			// report summary
+			auto sinceLastReportSeconds = (clock() - lastReportTime) / (float)CLOCKS_PER_SEC;
+			if (sinceLastReportSeconds > 10) {
+				cout << "Time Scale: " << timeScale 
+					<< ". Best Bubble: " << bubbles[0]->getMass() << endl;
+				
+				cout << "Top Bubble: ";
+				auto topBubble = bubbles[0]->getBrain();
+				printGenome(topBubble->getGenome());
+				topBubble->getNeuralNet().printIGraphEdgeList();
+
+				lastReportTime = clock();
+			}
 
 			this_thread::sleep_for(chrono::milliseconds((int)(10/timeScale)));
 		};

@@ -1,6 +1,10 @@
 #include "ai/Genome.h"
 #include "ai/Params.h"
 
+#include <iostream>
+#include <iomanip>
+#include <cstring>
+
 using namespace agarai;
 
 Genome agarai::makeRandomGenome() {
@@ -158,4 +162,24 @@ Genome agarai::generateChildGenome(const std::vector<Genome>& parentGenomes) {
     assert(genome.size() <= GENOME_MAX_LENGTH);
 
     return genome;
+}
+// Format: 32-bit hex strings, one per gene
+void agarai::printGenome(Genome genome) {
+  constexpr unsigned genesPerLine = 8;
+  unsigned count = 0;
+  for (Gene gene : genome) {
+    if (count == genesPerLine) {
+      std::cout << std::endl;
+      count = 0;
+    } else if (count != 0) {
+      std::cout << " ";
+    }
+
+    assert(sizeof(Gene) == 4);
+    uint32_t n;
+    std::memcpy(&n, &gene, sizeof(n));
+    std::cout << std::hex << std::setfill('0') << std::setw(8) << n;
+    ++count;
+  }
+  std::cout << std::dec << std::endl;
 }

@@ -19,10 +19,14 @@ void Brain::decide(const DecisionContext& context) {
 
   auto level = actions[Action::SET_DIRECTION];
   level = (std::tanh(level) + 1.0) / 2.0; // convert to 0.0..1.0
-  auto direction = level * M_PI;
+  auto direction = level * 2* M_PI;
   target->setDirection(direction);
 }
 
 Genome Brain::getGenome() const {
   return genome;
+}
+
+NeuralNet Brain::getNeuralNet() const {
+  return neuralNet;
 }

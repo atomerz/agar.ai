@@ -46,4 +46,7 @@ namespace agarai {
   // Must be called in single-thread mode between generations
   Genome generateChildGenome(const std::vector<Genome>& parentGenomes);
 
+  // Format: 32-bit hex strings, one per gene
+  void printGenome(Genome genome);
+
 }

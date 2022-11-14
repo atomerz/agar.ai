@@ -1,5 +1,7 @@
 #pragma once
-////////////////////////////////////////////////////////////////////////////////
+
+#include <string>
+
 namespace agarai
 {
   enum SensorType {
@@ -42,12 +44,22 @@ namespace agarai
     BIGGEST_FOOD_SW_DISTANCE,
     BIGGEST_FOOD_SE_MASS,
     BIGGEST_FOOD_SE_DISTANCE,
+    // closest threat
+    CLOSEST_THREAT_NE_MASS,
+    CLOSEST_THREAT_NE_DISTANCE,
+    CLOSEST_THREAT_NW_MASS,
+    CLOSEST_THREAT_NW_DISTANCE,
+    CLOSEST_THREAT_SW_MASS,
+    CLOSEST_THREAT_SW_DISTANCE,
+    CLOSEST_THREAT_SE_MASS,
+    CLOSEST_THREAT_SE_DISTANCE,
     NUM_SENSES,
     // TODO:
     // FOOD_DENSITY
-    // CLOSEST_THREAT
     // THREAT_DENSITY
   };
+
+  std::string sensorShortName(SensorType sensor);
 
   class Sensor {
     public:

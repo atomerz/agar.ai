@@ -17,6 +17,8 @@ class NeuralNet {
 
     std::array<float, Action::NUM_ACTIONS>  feedForward(Sensor* sensor);
 
+    void printIGraphEdgeList() const;
+
   private:
     void createWiringFromGenome(Genome genome);
 
@@ -27,6 +29,7 @@ class NeuralNet {
         bool driven;        // undriven neurons have fixed output values
     };
     std::vector<Neuron> neurons;
+
 };
 
 }

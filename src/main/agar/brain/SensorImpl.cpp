@@ -186,6 +186,46 @@ float SensorImpl::get(SensorType type) {
     sensorVal = normalizeDistance(context.me, bubble, context.worldLimits);
     break;
   }
+  case SensorType::CLOSEST_THREAT_NE_MASS: {
+    auto bubble = closestThreat(Direction::NE);
+    sensorVal = normalizeMass(bubble);
+    break;
+  }
+  case SensorType::CLOSEST_THREAT_NE_DISTANCE: {
+    auto bubble = closestThreat(Direction::NE);
+    sensorVal = normalizeDistance(context.me, bubble, context.worldLimits);
+    break;
+  }
+  case SensorType::CLOSEST_THREAT_NW_MASS: {
+    auto bubble = closestThreat(Direction::NW);
+    sensorVal = normalizeMass(bubble);
+    break;
+  }
+  case SensorType::CLOSEST_THREAT_NW_DISTANCE: {
+    auto bubble = closestThreat(Direction::NW);
+    sensorVal = normalizeDistance(context.me, bubble, context.worldLimits);
+    break;
+  }
+  case SensorType::CLOSEST_THREAT_SW_MASS: {
+    auto bubble = closestThreat(Direction::SW);
+    sensorVal = normalizeMass(bubble);
+    break;
+  }
+  case SensorType::CLOSEST_THREAT_SW_DISTANCE: {
+    auto bubble = closestThreat(Direction::SW);
+    sensorVal = normalizeDistance(context.me, bubble, context.worldLimits);
+    break;
+  }
+  case SensorType::CLOSEST_THREAT_SE_MASS: {
+    auto bubble = closestThreat(Direction::SE);
+    sensorVal = normalizeMass(bubble);
+    break;
+  }
+  case SensorType::CLOSEST_THREAT_SE_DISTANCE: {
+    auto bubble = closestThreat(Direction::SE);
+    sensorVal = normalizeDistance(context.me, bubble, context.worldLimits);
+    break;
+  }
   default:
     assert(false);
     break;
@@ -350,6 +390,36 @@ Bubble* const SensorImpl::biggestFood(Direction direction) {
 
   if (biggestFood != foodInDirection.end()) {
     l2Cache[direction] = *biggestFood;
+  } else {
+    l2Cache[direction] = nullptr;
+  }
+
+  return l2Cache[direction];
+}
+
+Bubble* const SensorImpl::closestThreat(Direction direction) {
+  auto l1Result = bubblesCache.find(Feature::CLOSEST_THREAT);
+  if (l1Result != bubblesCache.end()) {
+    auto& l2Cache = l1Result->second;
+    auto result = l2Cache.find(direction);
+    if (result != l2Cache.end()) {
+      return result->second;
+    }
+  }
+
+  auto& l2Cache = bubblesCache[Feature::CLOSEST_THREAT];
+
+  auto& neighborsInDirection = neighbors(direction);
+  std::vector<Bubble*> foodInDirection;
+  std::copy_if(neighborsInDirection.begin(), neighborsInDirection.end(), back_inserter(foodInDirection), [me = context.me](auto b){
+    return me->getMass() <= b->getMass();
+  });
+  auto closestFood = std::min_element(foodInDirection.begin(), foodInDirection.end(), [me = context.me](auto b1, auto b2){
+    return b1->getPosition().distance(me->getPosition()) < b2->getPosition().distance(me->getPosition());
+  });
+
+  if (closestFood != foodInDirection.end()) {
+    l2Cache[direction] = *closestFood;
   } else {
     l2Cache[direction] = nullptr;
   }
