@@ -57,6 +57,18 @@ std::string agarai::sensorShortName(SensorType sensor) {
     case SensorType::CLOSEST_THREAT_SE_MASS: return "CTseM";
     case SensorType::CLOSEST_THREAT_SE_DISTANCE: return "CTseD";
 
+    case SensorType::BIGGEST_FOOD_MASS: return "BFM";
+    case SensorType::BIGGEST_FOOD_DISTANCE: return "BFD";
+    case SensorType::BIGGEST_FOOD_DIRECTION: return "BFd";
+
+    case SensorType::CLOSEST_FOOD_MASS: return "CFM";
+    case SensorType::CLOSEST_FOOD_DISTANCE: return "CFD";
+    case SensorType::CLOSEST_FOOD_DIRECTION: return "CFd";
+
+    case SensorType::CLOSEST_THREAT_MASS: return "CTM";
+    case SensorType::CLOSEST_THREAT_DISTANCE: return "CTD";
+    case SensorType::CLOSEST_THREAT_DIRECTION: return "CTd";
+
     default: assert(false); break;
     }
 }

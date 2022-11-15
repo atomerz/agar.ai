@@ -13,6 +13,12 @@ SensorImpl::SensorImpl(const DecisionContext _context) : context(_context) {
 SensorImpl::~SensorImpl() {
 }
 
+static float normalizeAngle(Bubble* b1, Bubble* b2) {
+  if (b2 == nullptr) return 0;
+
+  return (b1->getPosition().angle(b2->getPosition()) + M_PI) / (2 * M_PI);
+}
+
 float SensorImpl::get(SensorType type) {
   float sensorVal = 0.0;
   switch (type) {
@@ -226,6 +232,51 @@ float SensorImpl::get(SensorType type) {
     sensorVal = normalizeDistance(context.me, bubble, context.worldLimits);
     break;
   }
+  case SensorType::BIGGEST_FOOD_MASS: {
+    auto bubble = biggestFood(Direction::NONE);
+    sensorVal = normalizeMass(bubble);
+    break;
+  }
+  case SensorType::BIGGEST_FOOD_DISTANCE: {
+    auto bubble = biggestFood(Direction::NONE);
+    sensorVal = normalizeDistance(context.me, bubble, context.worldLimits);
+    break;
+  }
+  case SensorType::BIGGEST_FOOD_DIRECTION: {
+    auto bubble = biggestFood(Direction::NONE);
+    sensorVal = normalizeAngle(context.me, bubble);
+    break;
+  }
+  case SensorType::CLOSEST_FOOD_MASS: {
+    auto bubble = closestFood(Direction::NONE);
+    sensorVal = normalizeMass(bubble);
+    break;
+  }
+  case SensorType::CLOSEST_FOOD_DISTANCE: {
+    auto bubble = closestFood(Direction::NONE);
+    sensorVal = normalizeDistance(context.me, bubble, context.worldLimits);
+    break;
+  }
+  case SensorType::CLOSEST_FOOD_DIRECTION: {
+    auto bubble = closestFood(Direction::NONE);
+    sensorVal = normalizeAngle(context.me, bubble);
+    break;
+  }
+  case SensorType::CLOSEST_THREAT_MASS: {
+    auto bubble = closestThreat(Direction::NONE);
+    sensorVal = normalizeMass(bubble);
+    break;
+  }
+  case SensorType::CLOSEST_THREAT_DISTANCE: {
+    auto bubble = closestThreat(Direction::NONE);
+    sensorVal = normalizeDistance(context.me, bubble, context.worldLimits);
+    break;
+  }
+  case SensorType::CLOSEST_THREAT_DIRECTION: {
+    auto bubble = closestThreat(Direction::NONE);
+    sensorVal = normalizeAngle(context.me, bubble);
+    break;
+  }
   default:
     assert(false);
     break;
@@ -256,6 +307,8 @@ float SensorImpl::normalizeDistance(Bubble* const b1, Bubble* const b2, Rectangl
 static bool checkDirection(SensorImpl::Direction direction, Coord2d p1, Coord2d p2) {
   switch (direction)
   {
+  case SensorImpl::Direction::NONE:
+    return true;
   case SensorImpl::Direction::NE:
     return p2.X >= p1.X && p2.Y >= p1.Y;
   case SensorImpl::Direction::NW:

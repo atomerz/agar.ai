@@ -9,7 +9,7 @@ using namespace agarai;
 ////////////////////////////////////////////////////////////////////////////////
 GameManager::GameManager()
 	: timeScale(1), initialBubbleMass(50), minFoodMass(5), maxFoodMass(10),
-	noFoods(1000), noBubbles(200) {
+	noFoods(1000), noBubbles(300) {
 }
 
 GameManager::~GameManager() {
@@ -139,7 +139,7 @@ void GameManager::run() {
 				topBubble->getGenome().print();
 				cout << "  brain:" << endl;
 				topBubble->getNeuralNet().printIGraphEdgeList();
-				cout << endl << endl << endl;
+				cout << endl;
 
 				lastReportTime = clock();
 			}

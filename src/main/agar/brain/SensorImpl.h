@@ -19,6 +19,7 @@ class SensorImpl: public Sensor {
     static float normalizeDistance(Bubble* const b1, Bubble* const b2, Rectangle limits);
 
     enum Direction {
+      NONE,
       NE,
       NW,
       SW,

@@ -11,13 +11,15 @@ namespace agarai
 		float Y;
 
 		Coord2d(float x=0, float y=0)
-			: X(x), Y(y)
-		{
+			: X(x), Y(y) {
 		}
 
-		float distance(const Coord2d& c) const
-		{
+		float distance(const Coord2d& c) const {
 			return sqrtf( powf(c.X - X, 2) +  powf(c.Y - Y, 2));
+		}
+
+		float angle(const Coord2d& c) const {
+			return std::atan2(c.Y - Y, c.X - X);
 		}
 
 		Coord2d operator-(const Coord2d& c)

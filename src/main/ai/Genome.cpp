@@ -113,8 +113,8 @@ std::unique_ptr<Genome> Genome::childGenome(const std::vector<Genome>& parentGen
   // true, then we give preference to candidate parents according to their
   // score. Their score was computed by the survival/selection algorithm
   // in survival-criteria.cpp.
-  if (CHOOSE_PARENT_BY_FITNESS && parentGenomes.size() > 1) {
-    parent1Idx = randomUint(1, parentGenomes.size() - 1);
+  if (CHOOSE_PARENT_BY_FITNESS && (parentGenomes.size() / 3) > 1) {
+    parent1Idx = randomUint(1, (parentGenomes.size() / 3) - 1);
     parent2Idx = randomUint(0, parent1Idx - 1);
   } else {
     parent1Idx = randomUint(0, parentGenomes.size() - 1);

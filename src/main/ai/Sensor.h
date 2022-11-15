@@ -8,7 +8,7 @@ namespace agarai
     LOCATION_X,
     LOCATION_Y,
     MASS,
-    // biggest neighbor
+    // biggest neighbor in direction
     BIGGEST_NEIGHBOR_NE_MASS,
     BIGGEST_NEIGHBOR_NE_DISTANCE,
     BIGGEST_NEIGHBOR_NW_MASS,
@@ -17,7 +17,7 @@ namespace agarai
     BIGGEST_NEIGHBOR_SW_DISTANCE,
     BIGGEST_NEIGHBOR_SE_MASS,
     BIGGEST_NEIGHBOR_SE_DISTANCE,
-    // smallest neighbor
+    // smallest neighbor in direction
     SMALLEST_NEIGHBOR_NE_MASS,
     SMALLEST_NEIGHBOR_NE_DISTANCE,
     SMALLEST_NEIGHBOR_NW_MASS,
@@ -26,7 +26,7 @@ namespace agarai
     SMALLEST_NEIGHBOR_SW_DISTANCE,
     SMALLEST_NEIGHBOR_SE_MASS,
     SMALLEST_NEIGHBOR_SE_DISTANCE,
-    // closest food
+    // closest food in direction
     CLOSEST_FOOD_NE_MASS,
     CLOSEST_FOOD_NE_DISTANCE,
     CLOSEST_FOOD_NW_MASS,
@@ -35,7 +35,7 @@ namespace agarai
     CLOSEST_FOOD_SW_DISTANCE,
     CLOSEST_FOOD_SE_MASS,
     CLOSEST_FOOD_SE_DISTANCE,
-    // biggest food
+    // biggest food in direction
     BIGGEST_FOOD_NE_MASS,
     BIGGEST_FOOD_NE_DISTANCE,
     BIGGEST_FOOD_NW_MASS,
@@ -44,7 +44,7 @@ namespace agarai
     BIGGEST_FOOD_SW_DISTANCE,
     BIGGEST_FOOD_SE_MASS,
     BIGGEST_FOOD_SE_DISTANCE,
-    // closest threat
+    // closest threat in direction
     CLOSEST_THREAT_NE_MASS,
     CLOSEST_THREAT_NE_DISTANCE,
     CLOSEST_THREAT_NW_MASS,
@@ -53,10 +53,19 @@ namespace agarai
     CLOSEST_THREAT_SW_DISTANCE,
     CLOSEST_THREAT_SE_MASS,
     CLOSEST_THREAT_SE_DISTANCE,
+    // biggest food overall
+    BIGGEST_FOOD_MASS,
+    BIGGEST_FOOD_DISTANCE,
+    BIGGEST_FOOD_DIRECTION,
+    // closest food overall
+    CLOSEST_FOOD_MASS,
+    CLOSEST_FOOD_DISTANCE,
+    CLOSEST_FOOD_DIRECTION,
+    // closest threat overall
+    CLOSEST_THREAT_MASS,
+    CLOSEST_THREAT_DISTANCE,
+    CLOSEST_THREAT_DIRECTION,
     NUM_SENSES,
-    // TODO:
-    // FOOD_DENSITY
-    // THREAT_DENSITY
   };
 
   std::string sensorShortName(SensorType sensor);
