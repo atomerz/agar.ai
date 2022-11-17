@@ -99,7 +99,7 @@ void Genome::applyPointMutations() {
   }
 }
 
-std::unique_ptr<Genome> Genome::childGenome(const std::vector<Genome>& parentGenomes) {
+std::unique_ptr<Genome> Genome::childGenome(const std::vector<Genome>& parentGenomes, int p1Idx) {
   // random parent (or parents if sexual reproduction) with random
   // mutations
   auto genome = std::unique_ptr<Genome>(new Genome());
@@ -114,10 +114,22 @@ std::unique_ptr<Genome> Genome::childGenome(const std::vector<Genome>& parentGen
   // score. Their score was computed by the survival/selection algorithm
   // in survival-criteria.cpp.
   if (CHOOSE_PARENT_BY_FITNESS && (parentGenomes.size() / 3) > 1) {
-    parent1Idx = randomUint(1, (parentGenomes.size() / 3) - 1);
-    parent2Idx = randomUint(0, parent1Idx - 1);
+    if (p1Idx >= 0) {
+      parent1Idx = p1Idx;
+    } else {
+      parent1Idx = randomUint(1, (parentGenomes.size() / 3) - 1);
+    }
+    if (parent1Idx == 0) {
+      parent2Idx = randomUint(1, (parentGenomes.size() / 3) - 1);
+    } else {
+      parent2Idx = randomUint(0, parent1Idx - 1);
+    }
   } else {
-    parent1Idx = randomUint(0, parentGenomes.size() - 1);
+    if (p1Idx >= 0) {
+      parent1Idx = p1Idx;
+    } else {
+      parent1Idx = randomUint(1, (parentGenomes.size() / 3) - 1);
+    }
     parent2Idx = randomUint(0, parentGenomes.size() - 1);
   }
 

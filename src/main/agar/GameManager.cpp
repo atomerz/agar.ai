@@ -9,7 +9,7 @@ using namespace agarai;
 ////////////////////////////////////////////////////////////////////////////////
 GameManager::GameManager()
 	: timeScale(1), initialBubbleMass(50), minFoodMass(5), maxFoodMass(10),
-	noFoods(1000), noBubbles(300) {
+	noFoods(500), noBubbles(100) {
 }
 
 GameManager::~GameManager() {
@@ -107,7 +107,7 @@ void GameManager::run() {
 					if(bubble->encompass(prey)) {
 						bubble->eat(prey);
 						prey->reset(initialBubbleMass, generateRandomCoords(),
-							std::move(Genome::childGenome(parentGenomes)));
+							std::move(Genome::childGenome(parentGenomes, i)));
 					}
 				}
 

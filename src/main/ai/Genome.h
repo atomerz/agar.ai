@@ -24,7 +24,7 @@ namespace agarai {
     // If the parameter p.sexualReproduction is true, two parents contribute
     // genes to the offspring. The new genome may undergo mutation.
     // Must be called in single-thread mode between generations
-    static std::unique_ptr<Genome> childGenome(const std::vector<Genome>& parentGenomes);
+    static std::unique_ptr<Genome> childGenome(const std::vector<Genome>& parentGenomes, int p1Idx=-1);
 
     const std::vector<Gene>& getGenes() const;
     const uint16_t getGeneration() const;
