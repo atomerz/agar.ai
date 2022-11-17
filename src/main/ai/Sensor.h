@@ -5,9 +5,11 @@
 namespace agarai
 {
   enum SensorType {
-    LOCATION_X,
-    LOCATION_Y,
-    MASS,
+    MY_X,
+    MY_Y,
+    MY_MASS,
+    MY_AGE,
+    MY_HUNGER,
     // biggest neighbor in direction
     BIGGEST_NEIGHBOR_NE_MASS,
     BIGGEST_NEIGHBOR_NE_DISTANCE,

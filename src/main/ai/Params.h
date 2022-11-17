@@ -18,4 +18,6 @@ namespace agarai {
   constexpr double DELETION_RATIO = 0.5;
   constexpr double POINT_MUTATION_RATE = 0.001;
 
+  constexpr float HUNGER_TOLERANCE = 60;
+
 }

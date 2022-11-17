@@ -5,7 +5,7 @@
 
 #include <cassert>
 #include <cmath>
-#include <iostream>
+#include <ostream>
 
 using namespace agarai;
 using namespace std;
@@ -71,23 +71,23 @@ array<float, Action::NUM_ACTIONS> NeuralNet::feedForward(Sensor* sensor) {
     return actionLevels;
 }
 
-void NeuralNet::printIGraphEdgeList() const {
+void NeuralNet::printIGraphEdgeList(std::ostream& os) const {
     for (auto & conn : connections) {
         if (conn.sourceType == SENSOR) {
-            std::cout << sensorShortName((SensorType)(conn.sourceNum));
+            os << sensorShortName((SensorType)(conn.sourceNum));
         } else {
-            std::cout << "N" << std::to_string(conn.sourceNum);
+            os << "N" << std::to_string(conn.sourceNum);
         }
 
-        std::cout << " ";
+        os << " ";
 
         if (conn.sinkType == ACTION) {
-            std::cout << actionShortName((Action)(conn.sinkNum));
+            os << actionShortName((Action)(conn.sinkNum));
         } else {
-            std::cout << "N" << std::to_string(conn.sinkNum);
+            os << "N" << std::to_string(conn.sinkNum);
         }
 
-        std::cout << " " << std::to_string(conn.weight) << std::endl;
+        os << " " << std::to_string(conn.weight) << std::endl;
     }
 }
 

@@ -32,15 +32,13 @@ void Bubble::reset(float mass, float x, float y, std::unique_ptr<Genome> genome)
   position.Y = y;
 
   age = 0;
+  sinceLastEat = 0;
 
   if (genome) {
     brain.reset(new Brain(this, *genome));
   } else {
     brain.reset();
   }
-
-  hash<Bubble*> hash_fn;
-  identifier = hash_fn(this);
 }
 
 void Bubble::reset(float mass, Coord2d c, std::unique_ptr<Genome> genome) {
@@ -74,6 +72,23 @@ bool Bubble::isBigger(Bubble* b) const {
 	return getRadius() >= b->getRadius() + 1;
 }
 
+std::string Bubble::toString() const {
+	stringstream sstr;
+	sstr << "{\n";
+	sstr << "  age: " << getAge() << endl;
+	sstr << "  mass: " << getMass() << endl;
+	sstr << "  sinceLastEat: " << getSinceLastEat() << endl;
+	if (brain) {
+	sstr << "  brain:\n";
+	sstr << "    generation: " << brain->getGenome().getGeneration() << endl;
+	sstr << "    graph:\n";
+	brain->getNeuralNet().printIGraphEdgeList(sstr);
+	}
+	sstr << "}\n";
+
+	return sstr.str();
+}
+
 void Bubble::eat(Bubble* target) {
 	assert(!_isDead && !target->_isDead
 		&& this->isBigger(target)
@@ -81,6 +96,8 @@ void Bubble::eat(Bubble* target) {
 
 	surface += target->surface;
 	target->die();
+
+	sinceLastEat = 0;
 }
 
 void Bubble::die() {
@@ -103,6 +120,10 @@ Brain* Bubble::getBrain() const {
 
 float Bubble::getAge() const {
   return age;
+}
+
+float Bubble::getSinceLastEat() const {
+  return sinceLastEat;
 }
 
 Coord2d Bubble::getPosition() const {
@@ -131,6 +152,7 @@ void Bubble::update(float elapsedTime, agarai::Rectangle limits, DecisionContext
 	if(_isDead || brain == nullptr) return;
 
 	age += elapsedTime;
+	sinceLastEat += elapsedTime;
 
 	brain->decide(context);
 

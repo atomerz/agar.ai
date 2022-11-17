@@ -37,6 +37,7 @@ public:
 	float getCurrentSpeed() const;
   	Brain* getBrain() const;
   	float getAge() const;
+  	float getSinceLastEat() const;
 
 	bool encompass(Coord2d c) const;
 	bool encompass(Bubble *b) const;
@@ -50,6 +51,8 @@ public:
 	 */
 	bool isBigger(Bubble *b) const;
 
+	std::string toString() const;
+
 protected:
   bool isDead() const;
   float getDirection() const;
@@ -57,7 +60,6 @@ protected:
 private:
 	const static float decayRate;
 
-	size_t identifier;
 	float surface;
 
 	Coord2d position;
@@ -68,6 +70,7 @@ private:
 	bool _isDead;
 
 	float age;
+	float sinceLastEat;
 
 private:
 	void die();

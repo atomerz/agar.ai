@@ -53,9 +53,9 @@ class ExampleSensor: public ::testing::Test {
 
 TEST_F(ExampleSensor, AllSensorsWorkProperly) {
   // self sensors
-  EXPECT_EQ(sensor->get(SensorType::LOCATION_X), 0.51f);
-  EXPECT_EQ(sensor->get(SensorType::LOCATION_Y), 0.52f);
-  EXPECT_FLOAT_EQ(sensor->get(SensorType::MASS), SensorImpl::normalizeMass(me.get()));
+  EXPECT_EQ(sensor->get(SensorType::MY_X), 0.51f);
+  EXPECT_EQ(sensor->get(SensorType::MY_Y), 0.52f);
+  EXPECT_FLOAT_EQ(sensor->get(SensorType::MY_MASS), SensorImpl::normalizeMass(me.get()));
 
   auto b0 = neighbors[0];
   auto b1 = neighbors[1];

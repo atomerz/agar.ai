@@ -8,7 +8,7 @@ g = igraph.Graph.Read_Ncol('net.txt', names=True, weights=True)
 for v in g.vs:
 	v['size'] = 35
 	v['label'] = v['name']
-	if v['name'] in [ 'X', 'Y', 'M',
+	if v['name'] in [ 'X', 'Y', 'M', 'A', 'H',
                       'BneM', 'BneD', 'BnwM', 'BnwD', 'BswM', 'BswD', 'BseM', 'BseD',
                       'SneM', 'SneD', 'SnwM', 'SnwD', 'SswM', 'SswD', 'SseM', 'SseD',
                       'CFneM', 'CFneD', 'CFnwM', 'CFnwD', 'CFswM', 'CFswD', 'CFseM', 'CFseD',

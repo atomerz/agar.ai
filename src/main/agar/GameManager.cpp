@@ -3,6 +3,7 @@
 #include <algorithm>
 
 #include "brain/Brain.h"
+#include "ai/Params.h"
 
 using namespace std;
 using namespace agarai;
@@ -89,7 +90,7 @@ void GameManager::run() {
 
 			lastUpdateTime = clock();
 
-			// check for collisions and old age
+			// Calculate who eats and who dies.
 			for(size_t i=0; i<bubbles.size(); ++i) {
 				auto bubble = bubbles[i];
 
@@ -111,8 +112,8 @@ void GameManager::run() {
 					}
 				}
 
-				// die of old age
-				if (bubbles[i]->getAge() > 180) {
+				// death by hunger
+				if (bubbles[i]->getSinceLastEat() > HUNGER_TOLERANCE) {
 					bubbles[i]->reset(initialBubbleMass, generateRandomCoords(),
 						std::move(Genome::childGenome(parentGenomes)));
 				}
@@ -128,18 +129,7 @@ void GameManager::run() {
 			auto sinceLastReportSeconds = (clock() - lastReportTime) / (float)CLOCKS_PER_SEC;
 			if (sinceLastReportSeconds > 10) {
 				cout << "Time Scale: " << timeScale << endl;
-				
-				cout << "Top Bubble: " << endl;
-				cout << "  mass: " << bubbles[0]->getMass() << endl;
-				cout << "  age: " << bubbles[0]->getAge() << endl;
-				
-				auto topBubble = bubbles[0]->getBrain();
-				cout << "  generation: " << topBubble->getGenome().getGeneration() << endl;
-				cout << "  genome:" << endl;
-				topBubble->getGenome().print();
-				cout << "  brain:" << endl;
-				topBubble->getNeuralNet().printIGraphEdgeList();
-				cout << endl;
+				cout << "Top Bubble: " << bubbles[0]->toString();
 
 				lastReportTime = clock();
 			}

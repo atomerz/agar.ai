@@ -3,6 +3,7 @@
 #include <algorithm>
 
 #include "agar/Bubble.h"
+#include "ai/Params.h"
 
 
 using namespace agarai;
@@ -19,17 +20,39 @@ static float normalizeAngle(Bubble* b1, Bubble* b2) {
   return (b1->getPosition().angle(b2->getPosition()) + M_PI) / (2 * M_PI);
 }
 
+static float normalizeAge(Bubble* b) {
+  if (b == nullptr) return 0;
+
+  constexpr float MAX_AGE = 1000;
+
+  return b->getAge() / MAX_AGE;
+}
+
+static float normalizeHunger(Bubble* b) {
+  if (b == nullptr) return 0;
+
+  return b->getSinceLastEat() / HUNGER_TOLERANCE;
+}
+
 float SensorImpl::get(SensorType type) {
   float sensorVal = 0.0;
   switch (type) {
-  case SensorType::LOCATION_X:
+  case SensorType::MY_X:
     sensorVal = context.me->getPosition().X / context.worldLimits.width();
     break;
-  case SensorType::LOCATION_Y:
+  case SensorType::MY_Y:
     sensorVal = context.me->getPosition().Y / context.worldLimits.height();
     break;
-  case SensorType::MASS: {
+  case SensorType::MY_MASS: {
     sensorVal = normalizeMass(context.me);
+    break;
+  }
+  case SensorType::MY_AGE: {
+    sensorVal = normalizeAge(context.me);
+    break;
+  }
+  case SensorType::MY_HUNGER: {
+    sensorVal = normalizeHunger(context.me);
     break;
   }
   case SensorType::BIGGEST_NEIGHBOR_NE_MASS: {

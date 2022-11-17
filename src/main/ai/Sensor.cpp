@@ -8,9 +8,11 @@ using namespace agarai;
 // Useful for later processing by graph-nnet.py.
 std::string agarai::sensorShortName(SensorType sensor) {
     switch(sensor) {    
-    case SensorType::LOCATION_X: return "X";
-    case SensorType::LOCATION_Y: return "Y";
-    case SensorType::MASS: return "M";
+    case SensorType::MY_X: return "X";
+    case SensorType::MY_Y: return "Y";
+    case SensorType::MY_MASS: return "M";
+    case SensorType::MY_AGE: return "A";
+    case SensorType::MY_HUNGER: return "H";
 
     case SensorType::BIGGEST_NEIGHBOR_NE_MASS: return "BneM";
     case SensorType::BIGGEST_NEIGHBOR_NE_DISTANCE: return "BneD";

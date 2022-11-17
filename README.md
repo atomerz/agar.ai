@@ -19,3 +19,11 @@ Run simulation:
 cmake --build build --target agar.ai
 build/src/agar.ai
 ```
+
+# TODOs/Ideas
+- Change decay logic to be based on age rather than mass.
+- Add/Update sensors to detect closest (both edge and center distance)
+  bubble in the 8 main directions.
+- Add genetic similarity sensor.
+- Enable dynamic population size.
+- Add statistical dashboards.

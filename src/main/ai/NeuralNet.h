@@ -17,7 +17,7 @@ class NeuralNet {
 
     std::array<float, Action::NUM_ACTIONS>  feedForward(Sensor* sensor);
 
-    void printIGraphEdgeList() const;
+    void printIGraphEdgeList(std::ostream& os) const;
 
   private:
     void createWiringFromGenome(Genome genome);
